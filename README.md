@@ -26,3 +26,9 @@ No additional requirements.
 ## Known issues
 
 None known at this time.
+
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+**Important:** All pull requests that change functionality must include updates to [CHANGELOG.md](CHANGELOG.md) following the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
