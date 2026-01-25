@@ -1,0 +1,4 @@
+{
+    "command.editorsQuickPick.open": "Editor Switcher: Open",
+    "command.editorsQuickPick.closeSelected": "Editor Switcher: Close highlighted editor"
+}
