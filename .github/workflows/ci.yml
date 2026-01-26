@@ -83,11 +83,11 @@ jobs:
 
       - name: Run tests (Linux)
         if: runner.os == 'Linux'
-        run: xvfb-run -a npm run test --silent -- --reporter json > test-results.json
+        run: xvfb-run -a npm run test -- --reporter json --reporter-options output=test-results.json
 
       - name: Run tests (Windows/macOS)
         if: runner.os != 'Linux'
-        run: npm run test --silent -- --reporter json > test-results.json
+        run: npm run test -- --reporter json --reporter-options output=test-results.json
 
       - name: Publish test results
         uses: dorny/test-reporter@v1
