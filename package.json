@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "displayName": "Editor Switcher",
   "description": "Quickly switch between open editors with a QuickPick. Provides an enhanced switcher experience, including closing the highlighted editor without leaving the picker.",
+  "repository": "https://github.com/mikejhill/vscode-editor-switcher",
   "license": "SEE LICENSE IN LICENSE",
   "icon": "// TODO",
   "engines": {
