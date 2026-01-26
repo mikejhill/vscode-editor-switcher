@@ -236,6 +236,9 @@ export class TabManager {
     if (!item.__tab) {
       throw new Error("Failed to open tab: tab reference is undefined");
     }
+    this.log.debug(
+      `openTab: opening "${item.label}" in group ${item.__group.viewColumn}`,
+    );
     await this.focusGroup(item.__group);
 
     const tabIndex = item.__group.tabs.indexOf(item.__tab);
@@ -243,6 +246,7 @@ export class TabManager {
       // Open by index
       const command = "workbench.action.openEditorAtIndex";
       await vscode.commands.executeCommand(command, tabIndex);
+      this.log.debug(`openTab: opened tab at index ${tabIndex}`);
     } else {
       // Tab not found
       throw new Error(
@@ -263,6 +267,8 @@ export class TabManager {
       return;
     }
 
+    this.log.debug("refreshItemsPreservingSelection: refreshing items");
+
     const previousItems = this.activeQuickPick.items;
     const activeBefore =
       preferredActive ?? this.activeQuickPick.activeItems?.[0];
@@ -272,6 +278,7 @@ export class TabManager {
     this.activeQuickPick.items = this.buildItems();
 
     if (!this.activeQuickPick.items.length) {
+      this.log.debug("refreshItemsPreservingSelection: no items available");
       return;
     }
 
@@ -295,6 +302,9 @@ export class TabManager {
       );
       if (sameTab) {
         this.activeQuickPick.activeItems = [sameTab];
+        this.log.debug(
+          `refreshItemsPreservingSelection: preserved selection for "${sameTab.label}"`,
+        );
         return;
       }
     }
@@ -306,6 +316,9 @@ export class TabManager {
     );
     if (fallbackItem) {
       this.activeQuickPick.activeItems = [fallbackItem];
+      this.log.debug(
+        `refreshItemsPreservingSelection: selected nearby item "${fallbackItem.label}"`,
+      );
     }
   }
 
@@ -381,15 +394,18 @@ export class TabManager {
    */
   private async closeHighlighted(): Promise<void> {
     if (!this.activeQuickPick) {
+      this.log.debug("closeHighlighted: no active quick pick");
       return;
     }
 
     const item = this.activeQuickPick.activeItems?.[0];
     if (!item || !item.__tab) {
+      this.log.debug("closeHighlighted: no active item or tab to close");
       return;
     }
 
     try {
+      this.log.debug(`closeHighlighted: closing tab "${item.label}"`);
       // Close without stealing focus from the picker
       await vscode.window.tabGroups.close(item.__tab, true);
 
@@ -427,8 +443,14 @@ export class TabManager {
         (item) => item.__tab === activeTab,
       );
       this.activeQuickPick.activeItems = activeItem ? [activeItem] : [];
+      if (activeItem) {
+        this.log.debug(`setInitialSelection: selected "${activeItem.label}"`);
+      }
     } else if (this.activeQuickPick.items.length) {
       this.activeQuickPick.activeItems = [this.activeQuickPick.items[0]];
+      this.log.debug(
+        `setInitialSelection: no active tab, selected first item "${this.activeQuickPick.items[0].label}"`,
+      );
     }
   }
 
@@ -440,18 +462,24 @@ export class TabManager {
       return;
     }
 
+    this.log.debug("setupQuickPickHandlers: setting up event handlers");
+
     const hide = async () => {
       try {
         const qp = this.activeQuickPick;
         this.activeQuickPick = undefined;
         await this.setContext("editorSwitcherVisible", false);
         qp?.dispose();
+        this.log.debug(
+          "setupQuickPickHandlers: quick pick hidden and disposed",
+        );
       } catch (error) {
         this.log.error("Failed to hide quick pick", error);
       }
     };
 
     this.activeQuickPick.onDidHide(() => {
+      this.log.debug("setupQuickPickHandlers: onDidHide fired");
       void hide();
     });
 
@@ -463,6 +491,7 @@ export class TabManager {
 
       void (async () => {
         try {
+          this.log.debug(`setupQuickPickHandlers: accepting "${item.label}"`);
           await this.openTab(item);
           await hide();
         } catch (error) {
@@ -477,6 +506,10 @@ export class TabManager {
       if (!tab) {
         return;
       }
+
+      this.log.debug(
+        `setupQuickPickHandlers: button triggered for "${event.item.label}"`,
+      );
 
       void (async () => {
         try {
@@ -525,11 +558,13 @@ export class TabManager {
   public activate(context: vscode.ExtensionContext): void {
     // Ensure previous registrations are cleaned up to avoid duplicate-command errors
     TabManager.disposeCommands();
+    this.log.debug("TabManager: registering commands");
 
     const openDisposable = vscode.commands.registerCommand(
       "editorSwitcher.open",
       async () => {
         try {
+          this.log.debug("Command: editorSwitcher.open triggered");
           await this.showQuickPick();
         } catch (error) {
           this.log.error("Failed to open editor switcher", error);
@@ -541,6 +576,7 @@ export class TabManager {
       "editorSwitcher.closeSelected",
       async () => {
         try {
+          this.log.debug("Command: editorSwitcher.closeSelected triggered");
           await this.closeHighlighted();
         } catch (error) {
           this.log.error("Failed to close highlighted tab", error);
@@ -550,6 +586,7 @@ export class TabManager {
 
     TabManager.commandDisposables = [openDisposable, closeDisposable];
     context.subscriptions.push(...TabManager.commandDisposables);
+    this.log.debug("TabManager: commands registered and subscribed");
   }
 
   /**
@@ -559,13 +596,19 @@ export class TabManager {
     // Dispose any existing picker
     this.activeQuickPick?.dispose();
 
+    this.log.debug("showQuickPick: creating quick pick");
+
     // Create and configure the quick pick
     const quickPick = this.createQuickPick();
     if (!quickPick) {
+      this.log.warn("showQuickPick: failed to create quick pick");
       return; // Defensive: VS Code should always return a quick pick
     }
     this.activeQuickPick = quickPick;
     this.activeQuickPick.items = this.buildItems();
+    this.log.debug(
+      `showQuickPick: built ${this.activeQuickPick.items.length} items`,
+    );
 
     // Set initial selection
     this.setInitialSelection();
@@ -578,14 +621,17 @@ export class TabManager {
 
     // Show the picker
     this.activeQuickPick?.show();
+    this.log.debug("showQuickPick: quick pick displayed");
   }
 
   /**
    * Cleans up resources when the extension is deactivated.
    */
   public deactivate(): void {
+    this.log.debug("TabManager: deactivating");
     this.activeQuickPick?.dispose();
     this.activeQuickPick = undefined;
     TabManager.disposeCommands();
+    this.log.debug("TabManager: deactivated");
   }
 }

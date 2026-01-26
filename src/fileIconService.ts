@@ -8,24 +8,41 @@ export class FileIconService {
   inferTabIcon(tab: vscode.Tab): vscode.ThemeIcon {
     const input = tab.input as any;
     let icon: vscode.ThemeIcon;
+    const tabLabel = tab.label ?? "unknown";
 
     if (!input) {
       // No input: Assume settings or similar
+      this.log.debug(`Tab "${tabLabel}": no input, using settings-gear icon`);
       icon = new vscode.ThemeIcon("settings-gear");
     } else if (input instanceof vscode.TabInputText) {
+      this.log.debug(`Tab "${tabLabel}": TabInputText, using file icon`);
       icon = vscode.ThemeIcon.File;
     } else if (input instanceof vscode.TabInputTextDiff) {
+      this.log.debug(`Tab "${tabLabel}": TabInputTextDiff, using diff icon`);
       icon = new vscode.ThemeIcon("diff");
     } else if (input instanceof vscode.TabInputNotebook) {
+      this.log.debug(
+        `Tab "${tabLabel}": TabInputNotebook, using notebook icon`,
+      );
       icon = new vscode.ThemeIcon("notebook");
     } else if (input instanceof vscode.TabInputNotebookDiff) {
+      this.log.debug(
+        `Tab "${tabLabel}": TabInputNotebookDiff, using diff icon`,
+      );
       icon = new vscode.ThemeIcon("diff");
     } else if (input instanceof vscode.TabInputWebview) {
+      this.log.debug(`Tab "${tabLabel}": TabInputWebview, using browser icon`);
       icon = new vscode.ThemeIcon("browser");
     } else if (input instanceof vscode.TabInputTerminal) {
+      this.log.debug(
+        `Tab "${tabLabel}": TabInputTerminal, using terminal icon`,
+      );
       icon = new vscode.ThemeIcon("terminal");
     } else if (input instanceof vscode.TabInputCustom) {
       const maybeUri: vscode.Uri | undefined = input?.uri;
+      this.log.debug(
+        `Tab "${tabLabel}": TabInputCustom with viewType "${input?.viewType}"`,
+      );
       icon =
         (maybeUri ? this.iconForUri(maybeUri) : undefined) ??
         this.iconForCustomViewType(input?.viewType) ??
@@ -39,7 +56,7 @@ export class FileIconService {
 
       const inputType = input?.constructor?.name ?? "unknown";
       this.log.debug(
-        `Using fallback icon for unrecognized tab input: ${inputType}`,
+        `Tab "${tabLabel}": Using fallback icon for unrecognized tab input type: ${inputType}`,
       );
     }
 
