@@ -83,11 +83,11 @@ jobs:
 
       - name: Run tests (Linux)
         if: runner.os == 'Linux'
-        run: xvfb-run -a npm run test -- --vscode-test-output test-results.json
+        run: xvfb-run -a npm run test -- --reporter json --vscode-test-output test-results.json
 
       - name: Run tests (Windows/macOS)
         if: runner.os != 'Linux'
-        run: npm run test -- --vscode-test-output test-results.json
+        run: npm run test -- --reporter json --vscode-test-output test-results.json
 
       - name: Publish test results
         uses: dorny/test-reporter@v1

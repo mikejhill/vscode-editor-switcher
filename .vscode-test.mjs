@@ -16,7 +16,6 @@ export default defineConfig({
   files: "out/test/**/*.test.js",
   mocha: outputPath
     ? {
-        reporter: "json",
         reporterOptions: {
           output: outputPath,
         },
