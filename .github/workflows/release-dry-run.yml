@@ -63,15 +63,6 @@ jobs:
             > /dev/null
           echo "✅ GitHub release permissions verified"
 
-      - name: Upload dry-run artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dry-run-${{ inputs.version }}
-          path: |
-            ${{ needs.build.outputs['vsix'] }}
-            ${{ needs.build.outputs['release-notes'] }}
-          retention-days: 14
-
       - name: Summarize results
         run: |
           {

@@ -52,10 +52,7 @@ jobs:
       - name: Production build
         run: npm run package
 
-      - name: Package VSIX
-        run: npm run package:vsix -- --no-git-tag-version ${{ inputs.version }}
-
-      - name: Generate release notes from CHANGELOG
+      - name: Prepare CHANGELOG and release notes
         shell: bash
         env:
           VERSION_INPUT: ${{ inputs.version }}
@@ -75,6 +72,8 @@ jobs:
             process.exit(1);
           }
           const md = fs.readFileSync('CHANGELOG.md','utf8');
+
+          // Find version section for release notes
           const header = `## [${version}]`;
           const start = md.indexOf(header);
           if (start === -1) {
@@ -89,7 +88,25 @@ jobs:
             process.exit(1);
           }
           fs.writeFileSync('RELEASE_NOTES.md', notes);
+
+          // Generate CHANGELOG without Unreleased section
+          const unreleasedStart = md.indexOf('## [Unreleased]');
+          if (unreleasedStart !== -1) {
+            const unreleasedEnd = md.indexOf('\n## [', unreleasedStart + 1);
+            if (unreleasedEnd !== -1) {
+              const beforeUnreleased = md.slice(0, unreleasedStart);
+              const afterUnreleased = md.slice(unreleasedEnd + 1);
+              fs.writeFileSync('CHANGELOG_RELEASE.md', beforeUnreleased + afterUnreleased);
+            } else {
+              fs.writeFileSync('CHANGELOG_RELEASE.md', md.slice(0, unreleasedStart));
+            }
+          } else {
+            fs.writeFileSync('CHANGELOG_RELEASE.md', md);
+          }
           NODE
+
+      - name: Package VSIX
+        run: npm run package:vsix -- --no-git-tag-version --changelog-path CHANGELOG_RELEASE.md ${{ inputs.version }}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
