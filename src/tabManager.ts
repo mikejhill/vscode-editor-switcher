@@ -17,8 +17,14 @@ export type TabItem = vscode.QuickPickItem & {
  */
 export class TabManager {
   private activeQuickPick: vscode.QuickPick<TabItem> | undefined;
+  private static commandDisposables: vscode.Disposable[] = [];
 
   constructor(private readonly iconService: FileIconService) {}
+
+  private static disposeCommands(): void {
+    TabManager.commandDisposables.forEach((d) => d.dispose());
+    TabManager.commandDisposables = [];
+  }
 
   /**
    * Sets a VS Code context variable for use in keybindings and when clauses.
@@ -375,9 +381,10 @@ export class TabManager {
     }
 
     const hide = async () => {
-      await this.setContext("editorSwitcherVisible", false);
-      this.activeQuickPick?.dispose();
+      const qp = this.activeQuickPick;
       this.activeQuickPick = undefined;
+      await this.setContext("editorSwitcherVisible", false);
+      qp?.dispose();
     };
 
     this.activeQuickPick.onDidHide(hide);
@@ -404,25 +411,52 @@ export class TabManager {
       // TODO: Enable dynamic refresh; unclear if this is necessary or under what conditions; maybe if tab is closed externally?
       // this.refreshItemsPreservingSelection();
     });
-    this.activeQuickPick.onDidHide(() => tabChangeDisposer.dispose());
+    const commandsApi = vscode.commands as typeof vscode.commands & {
+      onDidExecuteCommand?: (
+        listener: (event: { command: string }) => void,
+      ) => vscode.Disposable;
+    };
+
+    const closeQuickOpenDisposer: vscode.Disposable =
+      commandsApi.onDidExecuteCommand?.((event) => {
+        if (event.command === "workbench.action.closeQuickOpen") {
+          this.activeQuickPick?.hide();
+        }
+      }) ?? {
+        dispose: () => {
+          // onDidExecuteCommand not available; nothing to dispose
+        },
+      };
+
+    this.activeQuickPick.onDidHide(() => {
+      tabChangeDisposer.dispose();
+      closeQuickOpenDisposer.dispose();
+    });
   }
 
   /**
    * Registers commands and activates the extension.
    */
   public activate(context: vscode.ExtensionContext): void {
-    context.subscriptions.push(
-      vscode.commands.registerCommand("editorSwitcher.open", async () => {
-        await this.showQuickPick();
-      }),
+    // Ensure previous registrations are cleaned up to avoid duplicate-command errors
+    TabManager.disposeCommands();
 
-      vscode.commands.registerCommand(
-        "editorSwitcher.closeSelected",
-        async () => {
-          await this.closeHighlighted();
-        },
-      ),
+    const openDisposable = vscode.commands.registerCommand(
+      "editorSwitcher.open",
+      async () => {
+        await this.showQuickPick();
+      },
     );
+
+    const closeDisposable = vscode.commands.registerCommand(
+      "editorSwitcher.closeSelected",
+      async () => {
+        await this.closeHighlighted();
+      },
+    );
+
+    TabManager.commandDisposables = [openDisposable, closeDisposable];
+    context.subscriptions.push(...TabManager.commandDisposables);
   }
 
   /**
@@ -433,7 +467,11 @@ export class TabManager {
     this.activeQuickPick?.dispose();
 
     // Create and configure the quick pick
-    this.activeQuickPick = this.createQuickPick();
+    const quickPick = this.createQuickPick();
+    if (!quickPick) {
+      return; // Defensive: VS Code should always return a quick pick
+    }
+    this.activeQuickPick = quickPick;
     this.activeQuickPick.items = this.buildItems();
 
     // Set initial selection
@@ -446,7 +484,7 @@ export class TabManager {
     this.setupQuickPickHandlers();
 
     // Show the picker
-    this.activeQuickPick.show();
+    this.activeQuickPick?.show();
   }
 
   /**
@@ -455,5 +493,6 @@ export class TabManager {
   public deactivate(): void {
     this.activeQuickPick?.dispose();
     this.activeQuickPick = undefined;
+    TabManager.disposeCommands();
   }
 }
