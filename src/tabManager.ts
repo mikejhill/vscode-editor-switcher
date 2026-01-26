@@ -59,12 +59,12 @@ export class TabManager {
   private buildTabLabel(tab: vscode.Tab): string {
     const icons: string[] = [];
     if (tab.isActive) {
-      icons.push("$(eye)");
+      icons.push("$(target)");
     }
     if (tab.isDirty) {
       icons.push("$(primitive-dot)");
     }
-    return `${icons.join("")} ${tab.label}`;
+    return `${tab.label} ${icons.join("")}`.trim();
   }
 
   /**
@@ -286,7 +286,10 @@ export class TabManager {
     }
 
     // Fallback: select a nearby item, skipping separators
-    const fallbackItem = this.findNearbyNonSeparatorItem(activeIndex);
+    const fallbackItem = this.findNearbyNonSeparatorItem(
+      activeIndex,
+      activeBefore,
+    );
     if (fallbackItem) {
       this.activeQuickPick.activeItems = [fallbackItem];
     }
@@ -294,29 +297,68 @@ export class TabManager {
 
   /**
    * Finds a non-separator item near the given index.
-   * Prefers the item before the index, or the first available item after.
+   * Prefers the next item in the same group if available,
+   * otherwise falls back to the previous item in the same group.
+   *
+   * @param previousIndex - Index of the deleted item in the old list
+   * @param deletedItem - The item that was deleted, to identify its group
    */
   private findNearbyNonSeparatorItem(
     previousIndex: number,
+    deletedItem?: TabItem,
   ): TabItem | undefined {
     if (!this.activeQuickPick) {
       return undefined;
     }
 
     const items = this.activeQuickPick.items;
-    let newIndex = previousIndex > 0 ? previousIndex - 1 : 0;
-    newIndex = Math.min(newIndex, items.length - 1);
+    const targetGroup = deletedItem?.__group;
+    let result: TabItem | undefined;
 
-    // Skip past any separators
-    while (
-      newIndex < items.length &&
-      items[newIndex]?.kind === vscode.QuickPickItemKind.Separator
-    ) {
-      newIndex++;
+    // Try to find the most stable item in the same group
+    if (targetGroup && !result) {
+      const groupItems = items
+        .map((item, index) => ({ item, index }))
+        .filter(
+          ({ item, index }) =>
+            item.kind !== vscode.QuickPickItemKind.Separator &&
+            item.__group.viewColumn === targetGroup.viewColumn,
+        );
+      if (groupItems.length > 0) {
+        const nearest = groupItems.reduce((closest, current) =>
+          Math.abs(current.index - previousIndex) <
+          Math.abs(closest.index - previousIndex)
+            ? current
+            : closest,
+        );
+        result = nearest.item;
+      }
     }
 
-    newIndex = Math.min(newIndex, items.length - 1);
-    return items[newIndex];
+    // Fallback: find the next non-separator item
+    if (!result) {
+      let newIndex = previousIndex;
+
+      // Skip past any separators going forward
+      while (
+        newIndex < items.length &&
+        items[newIndex]?.kind === vscode.QuickPickItemKind.Separator
+      ) {
+        newIndex++;
+      }
+
+      // If we passed the end, pick the last non-separator item
+      if (newIndex >= items.length) {
+        result = items
+          .slice()
+          .reverse()
+          .find((item) => item?.kind !== vscode.QuickPickItemKind.Separator);
+      } else {
+        result = items[newIndex];
+      }
+    }
+
+    return result;
   }
 
   /**

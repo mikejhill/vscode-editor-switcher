@@ -103,6 +103,139 @@ suite("TabManager", () => {
     tabManager.deactivate();
   });
 
+  suite("labels and item details", () => {
+    test("buildTabLabel outputs full label with icons - active only", () => {
+      const tab = createMockTab({
+        label: "file.ts",
+        isActive: true,
+        isDirty: false,
+      });
+      const actual = (tabManager as any).buildTabLabel(tab);
+      assert.strictEqual(actual, "file.ts $(target)");
+    });
+
+    test("buildTabLabel outputs label only when no icons (trimmed)", () => {
+      const tab = createMockTab({
+        label: "file.ts",
+        isActive: false,
+        isDirty: false,
+      });
+      const actual = (tabManager as any).buildTabLabel(tab);
+      assert.strictEqual(actual, "file.ts");
+    });
+
+    test("buildTabLabel outputs full label with icons - dirty only", () => {
+      const tab = createMockTab({
+        label: "file.ts",
+        isActive: false,
+        isDirty: true,
+      });
+      const actual = (tabManager as any).buildTabLabel(tab);
+      assert.strictEqual(actual, "file.ts $(primitive-dot)");
+    });
+
+    test("buildTabLabel outputs full label with icons - active and dirty", () => {
+      const tab = createMockTab({
+        label: "file.ts",
+        isActive: true,
+        isDirty: true,
+      });
+      const actual = (tabManager as any).buildTabLabel(tab);
+      assert.strictEqual(actual, "file.ts $(target)$(primitive-dot)");
+    });
+
+    test("tabToItem populates description, uri, group, and iconPath", () => {
+      const uri = vscode.Uri.file("/workspace/src/components/Button.tsx");
+      const tab = createMockTab({
+        label: "Button.tsx",
+        isActive: true,
+        isDirty: false,
+        input: new vscode.TabInputText(uri),
+      });
+
+      const group: vscode.TabGroup = {
+        ...(createMockTabGroup() as any),
+        viewColumn: 3,
+        tabs: [tab],
+      } as any;
+
+      const asRelStub = sinon
+        .stub(vscode.workspace, "asRelativePath")
+        .callsFake((_v: any) => "src/components/Button.tsx");
+      const iconStub = sinon
+        .stub(iconService, "inferTabIcon")
+        .callsFake((_t: vscode.Tab) => new vscode.ThemeIcon("file-code"));
+
+      const item = (tabManager as any).tabToItem(
+        group,
+        tab,
+        true,
+      ) as vscode.QuickPickItem & {
+        __tab: vscode.Tab;
+        __group: vscode.TabGroup;
+      };
+
+      try {
+        // Label must exactly match including icon order and spacing
+        assert.strictEqual(item.label, "Button.tsx $(target)");
+        // Description is dirname of relative path
+        assert.strictEqual(item.description, "src/components");
+        // URI and group preserved
+        assert.ok(item.resourceUri);
+        assert.strictEqual((item.resourceUri as vscode.Uri).fsPath, uri.fsPath);
+        assert.strictEqual(item.__group.viewColumn, 3);
+        // Icon path comes from FileIconService
+        assert.ok(item.iconPath instanceof vscode.ThemeIcon);
+      } finally {
+        asRelStub.restore();
+        iconStub.restore();
+      }
+    });
+
+    test("tabToItem label is trimmed when no icons", () => {
+      const uri = vscode.Uri.file("/workspace/src/readme.txt");
+      const tab = createMockTab({
+        label: "readme.txt",
+        isActive: false,
+        isDirty: false,
+        input: new vscode.TabInputText(uri),
+      });
+      const group: vscode.TabGroup = {
+        ...(createMockTabGroup() as any),
+        viewColumn: 2,
+        tabs: [tab],
+      } as any;
+
+      const asRelStub = sinon
+        .stub(vscode.workspace, "asRelativePath")
+        .callsFake((_v: any) => "docs/readme.txt");
+      const iconStub = sinon
+        .stub(iconService, "inferTabIcon")
+        .callsFake((_t: vscode.Tab) => vscode.ThemeIcon.File);
+
+      const item = (tabManager as any).tabToItem(
+        group,
+        tab,
+        true,
+      ) as vscode.QuickPickItem & {
+        __tab: vscode.Tab;
+        __group: vscode.TabGroup;
+      };
+
+      try {
+        assert.strictEqual(item.label, "readme.txt");
+        assert.strictEqual(item.description, "docs");
+        assert.ok(item.resourceUri);
+        assert.strictEqual((item.resourceUri as vscode.Uri).fsPath, uri.fsPath);
+        assert.strictEqual(item.__group.viewColumn, 2);
+        assert.ok(item.iconPath instanceof vscode.ThemeIcon);
+      } finally {
+        asRelStub.restore();
+        iconStub.restore();
+      }
+    });
+  });
+
   suite("private helper methods", () => {
     test("mock tabs should have correct properties", () => {
       const activeTab = createMockTab({ isActive: true, label: "test.ts" });
