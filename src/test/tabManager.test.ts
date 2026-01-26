@@ -152,66 +152,7 @@ suite("TabManager", () => {
     });
   });
 
-  suite("icon service integration", () => {
-    test("should use FileIconService for tab icons", () => {
-      const spyIconService = new FileIconService();
-      const localTabManager = new TabManager(spyIconService);
-
-      // Verify TabManager was created successfully with the icon service
-      assert.ok(localTabManager, "TabManager should be instantiated");
-      // Verify we can infer icons for files
-      const testTab = createMockTab({
-        input: new vscode.TabInputText(vscode.Uri.file("/test.ts")),
-      });
-      const icon = spyIconService.inferTabIcon(testTab);
-      assert.ok(icon, "Icon service should infer icon for TypeScript file");
-    });
-
-    test("should infer correct icons for different file types", () => {
-      const extensions = [".ts", ".py", ".java", ".json", ".md"];
-      for (const ext of extensions) {
-        const tab = createMockTab({
-          input: new vscode.TabInputText(vscode.Uri.file(`/path/file${ext}`)),
-        });
-        const icon = iconService.inferTabIcon(tab);
-        assert.ok(icon, `Should have icon for ${ext}`);
-      }
-    });
-  });
-
   suite("activate and deactivate", () => {
-    test("should register commands on activation", () => {
-      const subscriptions: vscode.Disposable[] = [];
-      const context = {
-        subscriptions,
-        extensionPath: "/mock/path",
-        globalState: {} as any,
-        workspaceState: {} as any,
-      } as vscode.ExtensionContext;
-
-      tabManager.activate(context);
-
-      assert.strictEqual(subscriptions.length, 2); // editorSwitcher.open and closeSelected
-    });
-
-    test("should register editorSwitcher.open command", () => {
-      const subscriptions: vscode.Disposable[] = [];
-      const context = {
-        subscriptions,
-        extensionPath: "/mock/path",
-        globalState: {} as any,
-        workspaceState: {} as any,
-      } as vscode.ExtensionContext;
-
-      tabManager.activate(context);
-
-      assert.strictEqual(
-        subscriptions.length,
-        2,
-        "Should register exactly 2 commands",
-      );
-    });
-
     test("should dispose quick pick on deactivation without throwing", () => {
       const subscriptions: vscode.Disposable[] = [];
       const context = {

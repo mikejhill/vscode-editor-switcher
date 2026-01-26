@@ -370,6 +370,16 @@ suite("FileIconService - Edge Cases", () => {
     iconService = new FileIconService();
   });
 
+  test("should handle tab with empty label", () => {
+    const tab = createMockTab({ label: "" });
+    const icon = iconService.inferTabIcon(tab);
+    assert.strictEqual(
+      icon.id,
+      "file",
+      "Empty-label tab with default TabInputText should return generic file icon",
+    );
+  });
+
   test("should handle uppercase file extensions", () => {
     const tab = createMockTab({
       input: new vscode.TabInputCustom(
