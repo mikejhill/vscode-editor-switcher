@@ -1,0 +1,41 @@
+name: Unpublish Extension
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to unpublish (e.g., 1.0.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  unpublish:
+    name: Unpublish from VS Code Marketplace
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install vsce
+        run: npm install -g @vscode/vsce
+
+      - name: Get publisher and extension name
+        id: package-info
+        run: |
+          PUBLISHER=$(node -p "require('./package.json').publisher")
+          NAME=$(node -p "require('./package.json').name")
+          echo "publisher=$PUBLISHER" >> $GITHUB_OUTPUT
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+
+      - name: Unpublish extension version
+        run: vsce unpublish ${{ steps.package-info.outputs.publisher }}.${{ steps.package-info.outputs.name }}@${{ inputs.version }}
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}

@@ -17,6 +17,9 @@ on:
       release-notes:
         description: "Path to generated release notes from CHANGELOG"
         value: ${{ jobs.build.outputs.release-notes }}
+      version:
+        description: "Extracted version number (without 'v' prefix)"
+        value: ${{ jobs.build.outputs.version }}
 
 permissions:
   contents: write
@@ -28,6 +31,7 @@ jobs:
       artifact-name: ${{ steps.outputs.outputs.artifact-name }}
       tarball: ${{ steps.outputs.outputs.tarball }}
       release-notes: ${{ steps.outputs.outputs.release-notes }}
+      version: ${{ steps.outputs.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -104,3 +108,5 @@ jobs:
           echo "artifact-name=build-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
           echo "tarball=dist-${{ inputs.version }}.tar.gz" >> "$GITHUB_OUTPUT"
           echo "release-notes=RELEASE_NOTES.md" >> "$GITHUB_OUTPUT"
+          VERSION="${{ inputs.version }}"
+          echo "version=${VERSION#v}" >> "$GITHUB_OUTPUT"

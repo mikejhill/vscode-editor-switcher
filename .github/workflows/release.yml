@@ -36,3 +36,21 @@ jobs:
           files: ${{ needs.build.outputs['tarball'] }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-marketplace:
+    name: Publish to VS Code Marketplace
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs['artifact-name'] }}
+
+      - name: Install vsce
+        run: npm install -g @vscode/vsce
+
+      - name: Publish to Marketplace
+        run: vsce publish --packagePath *.vsix --version "${{ needs.build.outputs['version'] }}"
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
