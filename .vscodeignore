@@ -6,6 +6,8 @@
 !images/icon-256.png
 !l10n/**
 !CHANGELOG.md
+# Generated in CI
+!CHANGELOG_RELEASE.md
 !LICENSE
 !package.json
 !package.nls.*.json
