@@ -45,6 +45,7 @@ jobs:
         run: npm run compile
 
       - name: Package VSIX (date version)
+        shell: bash
         run: |
           DATE_VER="0.0.0-dev$(date +%Y%m%d%H%M%S)"
           npm run package:vsix -- --no-git-tag-version "$DATE_VER"
