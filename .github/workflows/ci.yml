@@ -15,9 +15,9 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
-  checks: write
-  pull-requests: write
+  contents: read # Checkout repository code
+  checks: write # Publish test results via dorny/test-reporter
+  pull-requests: write # Comment test results on PRs
 
 jobs:
   compile:
