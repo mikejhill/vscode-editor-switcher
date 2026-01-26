@@ -30,9 +30,6 @@ jobs:
           name: ${{ needs.build.outputs['artifact-name'] }}
           path: .
 
-      - name: List downloaded files
-        run: ls -la
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
