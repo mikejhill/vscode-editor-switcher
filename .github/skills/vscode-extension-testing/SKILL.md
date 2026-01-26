@@ -476,18 +476,184 @@ npm test -- --grep "should register commands"
 npm test -- --inspect-brk
 ```
 
+## Assertion Messages: Improving Test Diagnostics
+
+Assertion messages are crucial for debugging test failures. They should communicate what was expected, what was actually found, and why it matters. Include interpolated variable values to help diagnose issues quickly.
+
+### ✅ Best Practice: Messages with Interpolated Values
+
+```typescript
+// ✅ Clear message with actual values for debugging
+test("should preserve existing subscriptions when activating", () => {
+  const subscriptions: vscode.Disposable[] = [
+    { dispose: () => {} },
+    { dispose: () => {} },
+  ];
+  const context = { subscriptions, extensionPath: "/mock/path" } as any;
+
+  const initialLength = subscriptions.length;
+  assert.strictEqual(
+    initialLength,
+    2,
+    `Initial subscriptions should be 2, got: ${initialLength}`,
+  );
+
+  tabManager.activate(context);
+
+  // Clear message showing expected vs actual
+  assert.ok(
+    subscriptions.length >= initialLength,
+    `After activation, subscriptions (${subscriptions.length}) should be >= initial (${initialLength})`,
+  );
+});
+
+// ✅ Loop messages with values show exactly which iteration failed
+test("should return correct icons for all file types", () => {
+  const fileTypeMap = {
+    ".ts": "file-code",
+    ".json": "json",
+    ".md": "markdown",
+  };
+
+  for (const [extension, expectedIcon] of Object.entries(fileTypeMap)) {
+    const tab = createMockTab({ label: `file${extension}` });
+    const icon = service.inferTabIcon(tab);
+
+    assert.strictEqual(
+      icon.id,
+      expectedIcon,
+      `File with extension "${extension}" should have icon "${expectedIcon}", but got "${icon.id}"`,
+    );
+  }
+});
+
+// ✅ State change messages document what changed and why
+test("should handle rapid cycles and remain in consistent state", () => {
+  const cycles = 5;
+  let cyclesCompleted = 0;
+
+  assert.doesNotThrow(() => {
+    for (let i = 0; i < cycles; i++) {
+      tabManager.activate(context);
+      tabManager.deactivate();
+      cyclesCompleted++;
+    }
+  }, `Should handle ${cycles} rapid activate/deactivate cycles without errors`);
+
+  assert.strictEqual(
+    cyclesCompleted,
+    cycles,
+    `Expected ${cycles} complete cycles, completed: ${cyclesCompleted}`,
+  );
+});
+
+// ✅ Stub verification with messages
+test("should register command with correct callback", () => {
+  service.activate();
+
+  const callCount = registerStub.callCount;
+  assert.strictEqual(
+    callCount,
+    1,
+    `registerCommand should be called once, got ${callCount} calls`,
+  );
+
+  const commandName = registerStub.firstCall.args[0];
+  assert.strictEqual(
+    commandName,
+    "editor-switcher.show",
+    `Expected to register "editor-switcher.show", but registered "${commandName}"`,
+  );
+});
+```
+
+### ❌ Anti-Pattern: Weak or Missing Messages
+
+```typescript
+// ❌ No message at all
+test("should activate", () => {
+  assert.doesNotThrow(() => {
+    tabManager.activate(context);
+  });
+});
+
+// ❌ Generic message without values - hard to debug
+test("should work", () => {
+  assert.strictEqual(result, expected, "should be equal");
+});
+
+// ❌ Message doesn't help debugging
+test("should register commands", () => {
+  service.activate();
+  assert.ok(registerStub.called);
+  // No message, no information about what command or how many times
+});
+
+// ❌ Loop test with generic message - doesn't show which iteration failed
+test("should have icons for files", () => {
+  for (const ext of [".ts", ".json", ".py"]) {
+    const tab = createMockTab({ label: `file${ext}` });
+    const icon = service.inferTabIcon(tab);
+    assert.ok(icon, "Should have icon"); // Which extension? What icon?
+  }
+});
+```
+
 ## Pre-Submission Checklist
 
 Before committing tests:
 
 - [ ] Each test has meaningful assertion(s) - not `assert.ok()` or `assert.ok(true)`
 - [ ] No no-op tests - assertions would fail if implementation is wrong
-- [ ] Stub verification includes count AND arguments
+- [ ] **All assertions include messages with interpolated values** (expected, actual, iteration info)
+- [ ] Messages document WHY the assertion matters, not just what failed
+- [ ] Stub verification includes count AND arguments with clear messages
 - [ ] Mock objects are realistic and match VS Code API types
 - [ ] Integration tests clean up documents after use
 - [ ] Unit tests restore all stubs in teardown
 - [ ] Test names describe what is tested and expected behavior
-- [ ] Loop-based tests include helpful failure messages with `ext`/`input` labels
+- [ ] Loop-based tests include helpful failure messages with variable values
+- [ ] State change tests verify both the action didn't throw AND the state changed
 - [ ] All tests pass with current implementation
+
+## Assertion Message Patterns
+
+Use these patterns to write clear, diagnostic messages:
+
+```typescript
+// Pattern 1: Expected vs Actual (for value assertions)
+assert.strictEqual(
+  actual,
+  expected,
+  `Expected ${variable} to be "${expected}", but got "${actual}"`,
+);
+
+// Pattern 2: State change (before/after)
+assert.ok(
+  newValue >= oldValue,
+  `Value should increase from ${oldValue} to >= ${newValue}, but got ${newValue}`,
+);
+
+// Pattern 3: Loop iteration context
+assert.strictEqual(
+  result[key],
+  expected[key],
+  `For key "${key}", expected "${expected[key]}" but got "${result[key]}"`,
+);
+
+// Pattern 4: Stub call verification
+assert.strictEqual(
+  stub.callCount,
+  expected,
+  `Stub should be called ${expected} times, but was called ${stub.callCount} times`,
+);
+
+// Pattern 5: Sequence/operation tracking
+assert.strictEqual(
+  step,
+  expectedStep,
+  `Expected to complete ${expectedStep} operations in sequence, completed: ${step}`,
+);
+```
 
 See [references/REFERENCE.md](references/REFERENCE.md) for detailed API documentation and examples.

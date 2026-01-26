@@ -13,11 +13,11 @@ Execute and register commands.
 const commands = await vscode.commands.getCommands();
 
 // Execute command
-const result = await vscode.commands.executeCommand('command.id', arg1, arg2);
+const result = await vscode.commands.executeCommand("command.id", arg1, arg2);
 
 // Register command (usually in extension activation)
-const disposable = vscode.commands.registerCommand('myExt.myCommand', () => {
-  vscode.window.showInformationMessage('Command executed');
+const disposable = vscode.commands.registerCommand("myExt.myCommand", () => {
+  vscode.window.showInformationMessage("Command executed");
 });
 ```
 
@@ -30,15 +30,14 @@ Access open editors and tabs.
 const allGroups = vscode.window.tabGroups.all;
 
 // Get tabs in all groups
-const allTabs = vscode.window.tabGroups.all
-  .flatMap(group => group.tabs);
+const allTabs = vscode.window.tabGroups.all.flatMap((group) => group.tabs);
 
 // Access specific tab
 const tab = allTabs[0];
-console.log(tab.label);        // File name
-console.log(tab.isDirty);      // Unsaved?
-console.log(tab.isPreview);    // Preview tab?
-console.log(tab.group);        // Parent TabGroup
+console.log(tab.label); // File name
+console.log(tab.isDirty); // Unsaved?
+console.log(tab.isPreview); // Preview tab?
+console.log(tab.group); // Parent TabGroup
 ```
 
 ### vscode.workspace
@@ -48,20 +47,20 @@ Open and manage documents.
 ```typescript
 // Open document from file
 const doc = await vscode.workspace.openTextDocument(
-  vscode.Uri.file('/path/to/file.ts')
+  vscode.Uri.file("/path/to/file.ts"),
 );
 
 // Open untitled document with content
 const doc = await vscode.workspace.openTextDocument({
-  language: 'typescript',
-  content: 'const x = 1;',
+  language: "typescript",
+  content: "const x = 1;",
 });
 
 // Access document properties
-doc.getText();           // Full content
-doc.languageId;          // Language mode
-doc.isDirty;             // Unsaved changes?
-doc.uri;                 // File URI
+doc.getText(); // Full content
+doc.languageId; // Language mode
+doc.isDirty; // Unsaved changes?
+doc.uri; // File URI
 ```
 
 ### vscode.window
@@ -80,17 +79,17 @@ if (editor) {
 }
 
 // Show information/warning/error message
-await vscode.window.showInformationMessage('Info');
-await vscode.window.showWarningMessage('Warning');
-await vscode.window.showErrorMessage('Error');
+await vscode.window.showInformationMessage("Info");
+await vscode.window.showWarningMessage("Warning");
+await vscode.window.showErrorMessage("Error");
 
 // Show quick pick
-const selected = await vscode.window.showQuickPick(['Option 1', 'Option 2']);
+const selected = await vscode.window.showQuickPick(["Option 1", "Option 2"]);
 
 // Show input box
 const input = await vscode.window.showInputBox({
-  prompt: 'Enter something',
-  placeHolder: 'default value',
+  prompt: "Enter something",
+  placeHolder: "default value",
 });
 ```
 
@@ -101,13 +100,13 @@ Each tab has an `input` property that determines its type and how to access the 
 ```typescript
 // TabInputText: Regular file editor
 if (tab.input instanceof vscode.TabInputText) {
-  const uri = tab.input.uri;  // File path
+  const uri = tab.input.uri; // File path
 }
 
 // TabInputCustom: Custom editors with custom URI
 if (tab.input instanceof vscode.TabInputCustom) {
-  const uri = tab.input.uri;       // Custom URI
-  const viewType = tab.input.viewType;  // Custom view ID
+  const uri = tab.input.uri; // Custom URI
+  const viewType = tab.input.viewType; // Custom view ID
 }
 
 // TabInputTextDiff: Diff editor
@@ -137,11 +136,11 @@ if (tab.input instanceof vscode.TabInputTerminal) {
 Mock and verify VS Code API calls.
 
 ```typescript
-import * as sinon from 'sinon';
-import * as vscode from 'vscode';
+import * as sinon from "sinon";
+import * as vscode from "vscode";
 
 // Create stub
-const stub = sinon.stub(vscode.commands, 'registerCommand');
+const stub = sinon.stub(vscode.commands, "registerCommand");
 
 // Verify it was called
 assert.ok(stub.called);
@@ -150,8 +149,8 @@ assert.ok(stub.called);
 assert.strictEqual(stub.callCount, 2);
 
 // Verify call arguments
-assert.strictEqual(stub.firstCall.args[0], 'commandId');
-assert.strictEqual(stub.secondCall.args[0], 'commandId2');
+assert.strictEqual(stub.firstCall.args[0], "commandId");
+assert.strictEqual(stub.secondCall.args[0], "commandId2");
 
 // Verify not called
 assert.ok(!stub.called);
@@ -168,25 +167,25 @@ sinon.restore();
 ### Testing Command Registration
 
 ```typescript
-suite('Command Registration', () => {
+suite("Command Registration", () => {
   let registerStub: sinon.SinonStub;
 
   setup(() => {
-    registerStub = sinon.stub(vscode.commands, 'registerCommand');
+    registerStub = sinon.stub(vscode.commands, "registerCommand");
   });
 
   teardown(() => {
     sinon.restore();
   });
 
-  test('should register extension commands on activation', () => {
+  test("should register extension commands on activation", () => {
     const extension = new MyExtension();
     extension.activate();
 
     assert.strictEqual(registerStub.callCount, 3);
-    assert.strictEqual(registerStub.getCall(0).args[0], 'myExt.command1');
-    assert.strictEqual(registerStub.getCall(1).args[0], 'myExt.command2');
-    assert.strictEqual(registerStub.getCall(2).args[0], 'myExt.command3');
+    assert.strictEqual(registerStub.getCall(0).args[0], "myExt.command1");
+    assert.strictEqual(registerStub.getCall(1).args[0], "myExt.command2");
+    assert.strictEqual(registerStub.getCall(2).args[0], "myExt.command3");
   });
 });
 ```
@@ -194,10 +193,7 @@ suite('Command Registration', () => {
 ### Testing Icon Selection by File Extension
 
 ```typescript
-function createMockTab(
-  filename: string,
-  extension: string
-): vscode.Tab {
+function createMockTab(filename: string, extension: string): vscode.Tab {
   return {
     label: filename,
     isDirty: false,
@@ -205,28 +201,28 @@ function createMockTab(
     group: { viewColumn: vscode.ViewColumn.One } as vscode.TabGroup,
     input: new vscode.TabInputCustom(
       vscode.Uri.file(`/path/${filename}${extension}`),
-      'custom'
+      "custom",
     ),
   };
 }
 
-test('should return correct icon for file extensions', () => {
+test("should return correct icon for file extensions", () => {
   const testCases = [
-    ('main.ts', 'file-code'),
-    ('config.json', 'json'),
-    ('README.md', 'markdown'),
-    ('image.png', 'file-media'),
+    ("main.ts", "file-code"),
+    ("config.json", "json"),
+    ("README.md", "markdown"),
+    ("image.png", "file-media"),
   ];
 
   for (const [filename, expectedIcon] of testCases) {
-    const [name, ext] = filename.split('.');
+    const [name, ext] = filename.split(".");
     const tab = createMockTab(name, `.${ext}`);
 
     const icon = service.inferTabIcon(tab);
     assert.strictEqual(
       icon.id,
       expectedIcon,
-      `Should return ${expectedIcon} for .${ext}`
+      `Should return ${expectedIcon} for .${ext}`,
     );
   }
 });
@@ -235,15 +231,15 @@ test('should return correct icon for file extensions', () => {
 ### Testing with Real Editors
 
 ```typescript
-test('should switch between open editors', async () => {
+test("should switch between open editors", async () => {
   // Create two documents
   const doc1 = await vscode.workspace.openTextDocument({
-    language: 'typescript',
-    content: 'file 1',
+    language: "typescript",
+    content: "file 1",
   });
   const doc2 = await vscode.workspace.openTextDocument({
-    language: 'typescript',
-    content: 'file 2',
+    language: "typescript",
+    content: "file 2",
   });
 
   // Show first editor
@@ -263,7 +259,7 @@ test('should switch between open editors', async () => {
 ### Testing State Management
 
 ```typescript
-test('should initialize and cleanup state on activate/deactivate', () => {
+test("should initialize and cleanup state on activate/deactivate", () => {
   const manager = new TabManager();
 
   // Initially inactive
@@ -290,20 +286,252 @@ When creating mock tabs with file URIs, be aware of platform differences:
 
 ```typescript
 // Cross-platform file URI
-const uri = vscode.Uri.file('/path/to/file.ts');
+const uri = vscode.Uri.file("/path/to/file.ts");
 
 // URI path is always forward slashes
-assert.ok(uri.path.includes('/'));
+assert.ok(uri.path.includes("/"));
 
 // File extension handling
-import { extname } from 'path';
+import { extname } from "path";
 
-const ext = extname(uri.path);  // '.ts'
-const extLower = extname(uri.path).toLowerCase();  // handles '.TS'
+const ext = extname(uri.path); // '.ts'
+const extLower = extname(uri.path).toLowerCase(); // handles '.TS'
 
 // Windows paths in URIs still use forward slashes
-const windowsUri = vscode.Uri.file('C:\\Users\\file.ts');
-assert.ok(windowsUri.path.includes('/'));  // Still has forward slashes
+const windowsUri = vscode.Uri.file("C:\\Users\\file.ts");
+assert.ok(windowsUri.path.includes("/")); // Still has forward slashes
+```
+
+## Assertion Message Patterns and Examples
+
+Clear, detailed assertion messages are essential for debugging test failures. Include interpolated values showing expected vs actual results, loop iteration context, or state changes.
+
+### Pattern 1: Value Assertions with Expected/Actual
+
+```typescript
+// ❌ No message - hard to debug
+test("should infer icon type", () => {
+  const icon = service.inferTabIcon(tab);
+  assert.strictEqual(icon.id, "file-code");
+});
+
+// ✅ Message with interpolated values
+test("should infer icon type", () => {
+  const tab = createMockTab({ label: "main.ts" });
+  const icon = service.inferTabIcon(tab);
+  assert.strictEqual(
+    icon.id,
+    "file-code",
+    `For file "main.ts", expected icon "file-code" but got "${icon.id}"`,
+  );
+});
+```
+
+### Pattern 2: State Change Assertions
+
+```typescript
+// ❌ Doesn't verify state actually changed
+test("should activate without throwing", () => {
+  assert.doesNotThrow(() => {
+    tabManager.activate(context);
+  });
+});
+
+// ✅ Verify state changed AND includes helpful message
+test("should activate without throwing", () => {
+  assert.doesNotThrow(() => {
+    tabManager.activate(context);
+  }, "Activation should not throw");
+
+  // Also verify state changed
+  assert.doesNotThrow(() => {
+    tabManager.deactivate();
+  }, "After activation, deactivation should not throw");
+});
+
+// ✅ Track numeric state changes
+test("should preserve subscriptions on activation", () => {
+  const subscriptions: vscode.Disposable[] = [
+    { dispose: () => {} },
+    { dispose: () => {} },
+  ];
+  const context = { subscriptions, extensionPath: "/path" } as any;
+
+  const initialCount = subscriptions.length;
+  tabManager.activate(context);
+  const finalCount = subscriptions.length;
+
+  assert.ok(
+    finalCount >= initialCount,
+    `After activation, subscriptions should increase from ${initialCount}, got ${finalCount}`,
+  );
+});
+```
+
+### Pattern 3: Loop Iterations with Context
+
+```typescript
+// ❌ Message doesn't show which file type failed
+test("should infer icons for all file types", () => {
+  const types = [".ts", ".js", ".json"];
+  for (const ext of types) {
+    const tab = createMockTab({ label: `file${ext}` });
+    const icon = service.inferTabIcon(tab);
+    assert.ok(icon, "Should have icon");
+  }
+});
+
+// ✅ Include file extension in message to identify failing case
+test("should infer icons for all file types", () => {
+  const iconMap = {
+    ".ts": "file-code",
+    ".js": "file-code",
+    ".json": "json",
+  };
+
+  for (const [ext, expectedIcon] of Object.entries(iconMap)) {
+    const tab = createMockTab({ label: `file${ext}` });
+    const icon = service.inferTabIcon(tab);
+    assert.strictEqual(
+      icon.id,
+      expectedIcon,
+      `For file extension "${ext}", expected icon "${expectedIcon}" but got "${icon.id}"`,
+    );
+  }
+});
+
+// ✅ Track loop progress for operation sequences
+test("should handle multiple cycles", () => {
+  const operations = ["activate", "deactivate", "activate"];
+  let step = 0;
+
+  assert.doesNotThrow(
+    () => {
+      for (const op of operations) {
+        if (op === "activate") {
+          tabManager.activate(context);
+        } else {
+          tabManager.deactivate();
+        }
+        step++;
+      }
+    },
+    `Should complete all operations: ${operations.join(" -> ")}`,
+  );
+
+  assert.strictEqual(
+    step,
+    operations.length,
+    `Expected to complete ${operations.length} operations, completed: ${step}`,
+  );
+});
+```
+
+### Pattern 4: Stub Call Verification with Details
+
+```typescript
+// ❌ Verifies stub was called but doesn't document what was expected
+test("should register command", () => {
+  service.activate();
+  assert.ok(registerStub.called);
+});
+
+// ✅ Verify exact call count and arguments
+test("should register command", () => {
+  service.activate();
+
+  assert.strictEqual(
+    registerStub.callCount,
+    1,
+    `registerCommand should be called once, but was called ${registerStub.callCount} times`,
+  );
+
+  const commandName = registerStub.firstCall.args[0];
+  assert.strictEqual(
+    commandName,
+    "editor-switcher.show",
+    `Expected to register "editor-switcher.show", but registered "${commandName}"`,
+  );
+});
+
+// ✅ Multiple calls with detailed message
+test("should register multiple commands", () => {
+  service.activate();
+
+  const expectedCommands = ["editor-switcher.show", "editor-switcher.hide"];
+  const actualCommands = registerStub.getCalls().map((call) => call.args[0]);
+
+  assert.strictEqual(
+    actualCommands.length,
+    expectedCommands.length,
+    `Expected ${expectedCommands.length} commands, registered: ${actualCommands.length}`,
+  );
+
+  for (let i = 0; i < expectedCommands.length; i++) {
+    assert.strictEqual(
+      actualCommands[i],
+      expectedCommands[i],
+      `Command ${i + 1}: expected "${expectedCommands[i]}" but got "${actualCommands[i]}"`,
+    );
+  }
+});
+```
+
+### Pattern 5: Complex State Transitions
+
+```typescript
+// ✅ Document full state flow with clear messages
+test("should maintain consistency through activate/deactivate cycles", () => {
+  const context = createMockContext();
+  const maxCycles = 3;
+  let completedCycles = 0;
+
+  assert.doesNotThrow(() => {
+    for (let i = 0; i < maxCycles; i++) {
+      tabManager.activate(context);
+      tabManager.deactivate();
+      completedCycles++;
+    }
+  }, `Should handle ${maxCycles} cycles without throwing`);
+
+  assert.strictEqual(
+    completedCycles,
+    maxCycles,
+    `Expected ${maxCycles} cycles to complete, actually completed: ${completedCycles}`,
+  );
+
+  // Final state should still be valid
+  assert.doesNotThrow(() => {
+    tabManager.deactivate();
+  }, "Final deactivate after cycles should succeed");
+});
+```
+
+## Common Assertion Mistakes
+
+```typescript
+// ❌ Comparing arrays/objects with ===
+const actual = [1, 2, 3];
+const expected = [1, 2, 3];
+assert.ok(actual === expected); // ❌ Fails - different references!
+
+// ✅ Use deepStrictEqual for objects/arrays
+assert.deepStrictEqual(actual, expected, "Arrays should match");
+
+// ❌ No context about why value matters
+test("should return 5", () => {
+  assert.strictEqual(result, 5);
+});
+
+// ✅ Explain what the value represents
+test("should return 5 selected editors", () => {
+  const selected = service.getSelectedEditors();
+  assert.strictEqual(
+    selected.length,
+    5,
+    `Should select exactly 5 editors, selected: ${selected.length}`,
+  );
+});
 ```
 
 ## Debugging Tips
@@ -311,9 +539,9 @@ assert.ok(windowsUri.path.includes('/'));  // Still has forward slashes
 ### Print Test Output
 
 ```typescript
-test('debug test', () => {
+test("debug test", () => {
   const value = service.getValue();
-  console.log('Current value:', value);  // Shows in test output
+  console.log("Current value:", value); // Shows in test output
 
   assert.strictEqual(value, expected);
 });
@@ -323,7 +551,7 @@ test('debug test', () => {
 
 ```typescript
 // Run only this test (not others)
-test.only('should do something', () => {
+test.only("should do something", () => {
   // Test runs in isolation
 });
 ```
@@ -342,11 +570,11 @@ npm test -- src/test/myService.test.ts
 
 ```typescript
 // Log all calls to a stub
-stub.getCalls().forEach(call => {
-  console.log('Call:', call.args);
+stub.getCalls().forEach((call) => {
+  console.log("Call:", call.args);
 });
 
 // Verify specific call by index
 const call = stub.getCall(0);
-console.log('First call args:', call.args);
+console.log("First call args:", call.args);
 ```
