@@ -46,7 +46,7 @@ jobs:
 
       - name: Package VSIX (date version)
         run: |
-          DATE_VER=$(date +%Y%m%d-%H%M%S)
+          DATE_VER="0.0.0-dev.$(date +%Y%m%d.%H%M%S)"
           npm run package:vsix -- --no-git-tag-version "$DATE_VER"
 
       - name: Upload VSIX artifact
