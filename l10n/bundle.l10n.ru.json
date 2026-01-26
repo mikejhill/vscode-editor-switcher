@@ -1,3 +1,4 @@
 {
-    "Close Editor": "Закрыть редактор"
+    "Close Editor": "Закрыть редактор",
+    "Type to filter. Enter to switch. Use your close keybinding to close the highlighted editor.": "Введите для фильтрации. Нажмите Enter для переключения. Используйте сочетание клавиш закрытия для закрытия выделенного редактора."
 }

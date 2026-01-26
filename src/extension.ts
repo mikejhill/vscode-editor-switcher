@@ -14,6 +14,31 @@ export function activate(context: vscode.ExtensionContext): void {
   tabManager = new TabManager(fileIconService, logService);
 
   context.subscriptions.push(logService);
+
+  // Register commands
+  const openDisposable = vscode.commands.registerCommand(
+    "editorSwitcher.open",
+    async () => {
+      try {
+        await tabManager?.showQuickPick();
+      } catch (error) {
+        logService?.error("Failed to open editor switcher", error);
+      }
+    },
+  );
+
+  const closeDisposable = vscode.commands.registerCommand(
+    "editorSwitcher.closeSelected",
+    async () => {
+      try {
+        await tabManager?.closeHighlighted();
+      } catch (error) {
+        logService?.error("Failed to close highlighted tab", error);
+      }
+    },
+  );
+
+  context.subscriptions.push(openDisposable, closeDisposable);
   tabManager.activate(context);
   logService.info("Editor Switcher extension activated successfully");
 }

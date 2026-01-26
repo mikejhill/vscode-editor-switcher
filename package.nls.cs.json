@@ -1,4 +1,12 @@
 {
     "command.editorSwitcher.open": "Editor Switcher: Otevřít",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: Zavřít zvýrazněný editor"
+    "command.editorSwitcher.closeSelected": "Editor Switcher: Zavřít zvýrazněný editor",
+    "configuration.editorSwitcher.onCloseKeepGroupFocus.title": "Keep group focus on close",
+    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "Ponechat fokus skupiny při zavření. Pokud je true, výběr v dialogu rychlého výběru se pokusí zachovat fokus na nejbližší kartě ve stejné skupině po zavření zvýrazněné karty. Jinak se výběr dialogu při zavření přesune mezi skupinami podle zvolené strategie výběru karet rozšíření.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.title": "On close tab select strategy",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "On close tab select strategy: Controls which tab is selected after closing a highlighted tab via the quick pick dialog. This only affects the quick pick dialog, and it does not impact built-in editor tab selection if the closed tab was active.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "Select next",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "Select previous",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "Move focus to the next tab in the quick pick dialog.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "Move focus to the prior tab in the quick pick dialog."
 }

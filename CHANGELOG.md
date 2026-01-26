@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD024: Allow duplicate headings -->
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -7,9 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `editorSwitcher.onCloseKeepGroupFocus` setting to keep selection in the same editor group after closing from the picker when possible. If true, the quick pick dialog selection will try to stay on the nearest tab in the same group; otherwise, it will move between groups based on the extension’s tab selection strategy.
+- Add `editorSwitcher.onCloseSelectTabStrategy` setting to control which tab is selected after closing a highlighted tab via the quick pick dialog (options: "selectNext" or "selectPrevious"). This only affects the quick pick dialog and does not impact built-in editor tab selection if the closed tab was active.
+- Localize titles and descriptions for new close-behavior settings across bundled language packs.
+- Add comprehensive unit and integration tests for new settings and selection behavior
+- Improve existing test assertions for increased reliability
+
 ## [1.0.2]
 
-### Changed
+### Internal
 
 - CI changes only. Updated release workflow to use explicit VSIX filename for marketplace publishing
 

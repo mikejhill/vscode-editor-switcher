@@ -43,7 +43,39 @@
         "key": "ctrl+w",
         "when": "editorSwitcherVisible"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "%configuration.editorSwitcher.title%",
+      "id": "editorSwitcher",
+      "properties": {
+        "editorSwitcher.onCloseKeepGroupFocus": {
+          "type": "boolean",
+          "description": "%configuration.editorSwitcher.onCloseKeepGroupFocus.description%",
+          "order": 10,
+          "default": true,
+          "scope": "window"
+        },
+        "editorSwitcher.onCloseSelectTabStrategy": {
+          "type": "string",
+          "description": "%configuration.editorSwitcher.onCloseSelectTabStrategy.description%",
+          "order": 20,
+          "default": "selectNext",
+          "enum": [
+            "selectNext",
+            "selectPrevious"
+          ],
+          "enumItemLabels": [
+            "%configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel%",
+            "%configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel%"
+          ],
+          "enumDescriptions": [
+            "%configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext%",
+            "%configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious%"
+          ],
+          "scope": "window"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

@@ -1,3 +1,4 @@
 {
-    "Close Editor": "關閉編輯器"
+    "Close Editor": "關閉編輯器",
+    "Type to filter. Enter to switch. Use your close keybinding to close the highlighted editor.": "輸入以篩選。按 Enter 鍵切換。使用您的關閉快捷鍵關閉反白顯示的編輯器。"
 }

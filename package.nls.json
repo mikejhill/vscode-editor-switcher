@@ -1,4 +1,11 @@
 {
     "command.editorSwitcher.open": "Editor Switcher: Open",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: Close highlighted editor"
+    "command.editorSwitcher.closeSelected": "Editor Switcher: Close highlighted editor",
+    "configuration.editorSwitcher.title": "Editor Switcher",
+    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "Keep group focus on close. If true, the quick pick dialog selection will attempt to retain focus on the nearest tab in the same group after closing a highlighted tab. Otherwise, the dialog selection will move between groups on close based on the selected extension tab selection strategy.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "On close tab select strategy: Controls which tab is selected after closing a highlighted tab via the quick pick dialog. This only affects the quick pick dialog, and it does not impact built-in editor tab selection if the closed tab was active.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "Select next",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "Select previous",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "Move focus to the next tab in the quick pick dialog.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "Move focus to the prior tab in the quick pick dialog."
 }

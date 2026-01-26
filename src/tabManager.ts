@@ -12,6 +12,8 @@ export type TabItem = vscode.QuickPickItem & {
   __group: vscode.TabGroup;
 };
 
+export type PostCloseFocusStrategy = "selectNext" | "selectPrevious";
+
 /**
  * Manages tab selection and interaction via a quick pick interface.
  * Handles displaying tabs, opening, closing, and maintaining selection state.
@@ -24,6 +26,20 @@ export class TabManager {
     private readonly iconService: FileIconService,
     private readonly log: ILogger,
   ) {}
+
+  private get onCloseKeepGroupFocus(): boolean {
+    const config = vscode.workspace.getConfiguration("editorSwitcher");
+    return config.get<boolean>("onCloseKeepGroupFocus", true);
+  }
+
+  private get onCloseSelectTabStrategy(): PostCloseFocusStrategy {
+    const config = vscode.workspace.getConfiguration("editorSwitcher");
+    const strategy = config.get<PostCloseFocusStrategy>(
+      "onCloseSelectTabStrategy",
+      "selectNext",
+    );
+    return strategy === "selectPrevious" ? "selectPrevious" : "selectNext";
+  }
 
   private static disposeCommands(): void {
     TabManager.commandDisposables.forEach((d) => d.dispose());
@@ -338,61 +354,59 @@ export class TabManager {
       return undefined;
     }
 
-    const items = this.activeQuickPick.items;
+    const targetIndex = Math.max(previousIndex, 0);
+    const strategy = this.onCloseSelectTabStrategy;
+    const itemsWithIndex = this.activeQuickPick.items
+      .map((item, index) => ({ item, index }))
+      .filter(({ item }) => item.kind !== vscode.QuickPickItemKind.Separator);
+
+    if (!itemsWithIndex.length) {
+      return undefined;
+    }
+
     const targetGroup = deletedItem?.__group;
-    let result: TabItem | undefined;
+    let scopedCandidates = itemsWithIndex;
 
-    // Try to find the most stable item in the same group
-    if (targetGroup && !result) {
-      const groupItems = items
-        .map((item, index) => ({ item, index }))
-        .filter(
-          ({ item, index }) =>
-            item.kind !== vscode.QuickPickItemKind.Separator &&
-            item.__group.viewColumn === targetGroup.viewColumn,
-        );
-      if (groupItems.length > 0) {
-        const nearest = groupItems.reduce((closest, current) =>
-          Math.abs(current.index - previousIndex) <
-          Math.abs(closest.index - previousIndex)
-            ? current
-            : closest,
-        );
-        result = nearest.item;
+    if (this.onCloseKeepGroupFocus && targetGroup) {
+      const sameGroup = itemsWithIndex.filter(
+        ({ item }) => item.__group.viewColumn === targetGroup.viewColumn,
+      );
+      if (sameGroup.length) {
+        scopedCandidates = sameGroup;
       }
     }
 
-    // Fallback: find the next non-separator item
-    if (!result) {
-      let newIndex = previousIndex;
-
-      // Skip past any separators going forward
-      while (
-        newIndex < items.length &&
-        items[newIndex]?.kind === vscode.QuickPickItemKind.Separator
-      ) {
-        newIndex++;
-      }
-
-      // If we passed the end, pick the last non-separator item
-      if (newIndex >= items.length) {
-        result = items
-          .slice()
-          .reverse()
-          .find((item) => item?.kind !== vscode.QuickPickItemKind.Separator);
-      } else {
-        result = items[newIndex];
-      }
+    if (!scopedCandidates.length) {
+      return undefined;
     }
 
-    return result;
+    if (strategy === "selectNext") {
+      const samePosition = scopedCandidates.find(
+        ({ index }) => index >= targetIndex,
+      );
+      return (
+        samePosition?.item ?? scopedCandidates[scopedCandidates.length - 1].item
+      );
+    }
+
+    const previous = [...scopedCandidates]
+      .reverse()
+      .find(({ index }) => index < targetIndex);
+    if (previous) {
+      return previous.item;
+    }
+
+    const fallbackAfter = scopedCandidates.find(
+      ({ index }) => index >= targetIndex,
+    );
+    return fallbackAfter?.item ?? scopedCandidates[0].item;
   }
 
   /**
    * Closes the currently highlighted tab in the quick pick.
    * Maintains focus on the quick pick and selects a nearby tab.
    */
-  private async closeHighlighted(): Promise<void> {
+  public async closeHighlighted(): Promise<void> {
     if (!this.activeQuickPick) {
       this.log.debug("closeHighlighted: no active quick pick");
       return;
@@ -421,8 +435,9 @@ export class TabManager {
    */
   private createQuickPick(): vscode.QuickPick<TabItem> {
     const quickPick = vscode.window.createQuickPick<TabItem>();
-    quickPick.placeholder =
-      "Type to filter. Enter to switch. Use your close keybinding to close the highlighted editor.";
+    quickPick.placeholder = vscode.l10n.t(
+      "Type to filter. Enter to switch. Use your close keybinding to close the highlighted editor.",
+    );
     quickPick.matchOnDescription = true;
     quickPick.matchOnDetail = true;
     quickPick.keepScrollPosition = true;
@@ -553,46 +568,18 @@ export class TabManager {
   }
 
   /**
-   * Registers commands and activates the extension.
+   * Activates the extension.
    */
   public activate(context: vscode.ExtensionContext): void {
-    // Ensure previous registrations are cleaned up to avoid duplicate-command errors
+    // Ensure previous registrations are cleaned up
     TabManager.disposeCommands();
-    this.log.debug("TabManager: registering commands");
-
-    const openDisposable = vscode.commands.registerCommand(
-      "editorSwitcher.open",
-      async () => {
-        try {
-          this.log.debug("Command: editorSwitcher.open triggered");
-          await this.showQuickPick();
-        } catch (error) {
-          this.log.error("Failed to open editor switcher", error);
-        }
-      },
-    );
-
-    const closeDisposable = vscode.commands.registerCommand(
-      "editorSwitcher.closeSelected",
-      async () => {
-        try {
-          this.log.debug("Command: editorSwitcher.closeSelected triggered");
-          await this.closeHighlighted();
-        } catch (error) {
-          this.log.error("Failed to close highlighted tab", error);
-        }
-      },
-    );
-
-    TabManager.commandDisposables = [openDisposable, closeDisposable];
-    context.subscriptions.push(...TabManager.commandDisposables);
-    this.log.debug("TabManager: commands registered and subscribed");
+    this.log.debug("TabManager: activated");
   }
 
   /**
    * Displays the tab quick pick interface.
    */
-  private async showQuickPick(): Promise<void> {
+  public async showQuickPick(): Promise<void> {
     // Dispose any existing picker
     this.activeQuickPick?.dispose();
 

@@ -1,4 +1,12 @@
 {
     "command.editorSwitcher.open": "Editor Switcher: 열기",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: 강조 표시된 편집기 닫기"
+    "command.editorSwitcher.closeSelected": "Editor Switcher: 강조 표시된 편집기 닫기",
+    "configuration.editorSwitcher.onCloseKeepGroupFocus.title": "Keep group focus on close",
+    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "닫을 때 그룹 포커스를 유지합니다. true이면 빠른 선택 대화 상자 선택이 강조 표시된 탭을 닫은 후 같은 그룹의 가장 가까운 탭에 포커스를 유지하려고 시도합니다. 그렇지 않으면 대화 상자 선택이 선택한 확장 탭 선택 전략에 따라 닫을 때 그룹 간 이동합니다.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.title": "On close tab select strategy",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "On close tab select strategy: Controls which tab is selected after closing a highlighted tab via the quick pick dialog. This only affects the quick pick dialog, and it does not impact built-in editor tab selection if the closed tab was active.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "Select next",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "Select previous",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "Move focus to the next tab in the quick pick dialog.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "Move focus to the prior tab in the quick pick dialog."
 }

@@ -1,4 +1,12 @@
 {
     "command.editorSwitcher.open": "Editor Switcher: 打开",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: 关闭突出显示的编辑器"
+    "command.editorSwitcher.closeSelected": "Editor Switcher: 关闭突出显示的编辑器",
+    "configuration.editorSwitcher.onCloseKeepGroupFocus.title": "Keep group focus on close",
+    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "关闭时保持组焦点。若为 true，快速选择对话框的选项将在关闭高亮选项卡后尝试将焦点保留在同一组中最近的选项卡上；否则，对话框选择将在关闭时根据所选扩展的选项卡选择策略在各组间移动。",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.title": "On close tab select strategy",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "On close tab select strategy: Controls which tab is selected after closing a highlighted tab via the quick pick dialog. This only affects the quick pick dialog, and it does not impact built-in editor tab selection if the closed tab was active.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "Select next",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "Select previous",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "Move focus to the next tab in the quick pick dialog.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "Move focus to the prior tab in the quick pick dialog."
 }

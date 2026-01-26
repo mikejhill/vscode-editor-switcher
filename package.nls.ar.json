@@ -1,4 +1,11 @@
 {
     "command.editorSwitcher.open": "Editor Switcher: فتح",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: إغلاق المحرر المميز"
+    "command.editorSwitcher.closeSelected": "Editor Switcher: إغلاق المحرر المميز""configuration.editorSwitcher.onCloseKeepGroupFocus.title": "Keep group focus on close",
+    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "الاحتفاظ بالتركيز على المجموعة عند الإغلاق. إذا كان true، سيحاول اختيار مربع الحوار السريع الاحتفاظ بالتركيز على أقرب علامة تبويب في المجموعة نفسها بعد إغلاق علامة تبويب مميزة. وإلا فسوف ينتقل اختيار مربع الحوار بين المجموعات عند الإغلاق بناءً على استراتيجية اختيار علامات التبويب المحددة للامتداد.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.title": "On close tab select strategy",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "On close tab select strategy: Controls which tab is selected after closing a highlighted tab via the quick pick dialog. This only affects the quick pick dialog, and it does not impact built-in editor tab selection if the closed tab was active.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "Select next",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "Select previous",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "Move focus to the next tab in the quick pick dialog.",
+    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "Move focus to the prior tab in the quick pick dialog."
 }

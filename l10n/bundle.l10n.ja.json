@@ -1,3 +1,4 @@
 {
-    "Close Editor": "エディターを閉じる"
+    "Close Editor": "エディターを閉じる",
+    "Type to filter. Enter to switch. Use your close keybinding to close the highlighted editor.": "フィルタするために入力します。切り替えるにはEnterを押します。ハイライトされたエディターを閉じるには、閉じるキーバインディングを使用します。"
 }
