@@ -21,8 +21,12 @@ permissions:
 
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,13 +44,18 @@ jobs:
       - name: Compile (type-check, lint, bundle)
         run: npm run compile
 
-      - name: Upload build artifacts (dist)
+      - name: Package VSIX (date version)
+        run: |
+          DATE_VER=$(date +%Y%m%d-%H%M%S)
+          npm run package:vsix -- --no-git-tag-version "$DATE_VER"
+
+      - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dist-ubuntu-${{ github.run_id }}
+          name: vsix-${{ runner.os }}-${{ github.run_id }}
           path: |
-            dist/**
-          if-no-files-found: warn
+            *.vsix
+          if-no-files-found: error
           retention-days: 14
 
   test:
