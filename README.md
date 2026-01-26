@@ -1,5 +1,8 @@
 # Editor Switcher
 
+[![CI](https://github.com/mikejhill/vscode-editor-switcher/actions/workflows/ci.yml/badge.svg)](https://github.com/mikejhill/vscode-editor-switcher/actions/workflows/ci.yml)
+[![Release](https://github.com/mikejhill/vscode-editor-switcher/actions/workflows/release.yml/badge.svg)](https://github.com/mikejhill/vscode-editor-switcher/actions/workflows/release.yml)
+
 Quickly move between open editors with a QuickPick that also lets you close the highlighted editor without leaving the list.
 
 ## Features
