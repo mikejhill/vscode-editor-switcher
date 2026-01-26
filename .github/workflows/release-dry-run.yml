@@ -60,6 +60,6 @@ jobs:
             echo "";
             cat "${{ needs.build.outputs['release-notes'] }}";
             echo "";
-            echo "### GitHub generated notes (token check)";
+            echo "### GitHub generated notes (proof of GitHub token check only)";
             jq -r '.body // "<empty>"' generated-notes.json;
           } >> "$GITHUB_STEP_SUMMARY"
