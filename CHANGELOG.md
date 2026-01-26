@@ -5,21 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### Changed
-
-- Refactored when condition tests to use VS Code extension integration tests instead of mocked APIs
+## [1.0.0]
 
 ### Added
 
-- Quick picker to list and switch between open editors
-- Close highlighted editor without leaving the picker
-- File icons display in the editor list
+Initial release:
+
+- Default keybindings: Ctrl+Alt+E to open picker, Ctrl+W to close selected editor
+- Quick picker to list and switch between open editors with file icons
+- Close highlighted editor from the picker without leaving it
 - Dirty markers for unsaved files
 - Visual separators between editor groups
-- Close button on each item for mouse users
-- Default keybinding: `Ctrl+Alt+E` to open picker
-- Default keybinding: `Ctrl+W` to close highlighted editor while picker is open
-- Command: `editorsQuickPick.open` - Open the editor switcher
-- Command: `editorsQuickPick.closeSelected` - Close highlighted editor
+- Close button on picker items for mouse users
+- Core commands: editorSwitcher.open, editorSwitcher.closeSelected
+- Integration tests for end-to-end functionality
