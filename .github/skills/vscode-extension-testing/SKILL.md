@@ -1,11 +1,11 @@
 ---
 name: vscode-extension-testing
-description: Create well-formed, meaningful tests for VS Code extensions using unit tests with mocks, integration tests with the VS Code test harness, and hybrid approaches. Avoid no-op tests by using strict assertions that validate actual behavior.
+description: Use when writing or reviewing tests for VS Code extension development. Provides clear guidance on how to create, analyze, and run tests in order to validate real extension behavior end-to-end.
 license: MIT
 metadata:
   author: Michael Hill (mikejhill.com)
   version: "1.0"
-compatibility: Designed for VS Code extension development with Mocha, Sinon, and the VS Code Test API
+compatibility: VS Code extension development with NPM, Mocha, Sinon, and the VS Code Test API
 ---
 
 # VS Code Extension Testing
