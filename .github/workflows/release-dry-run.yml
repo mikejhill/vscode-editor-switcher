@@ -27,6 +27,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
@@ -65,7 +68,7 @@ jobs:
         with:
           name: dry-run-${{ inputs.version }}
           path: |
-            ${{ needs.build.outputs['tarball'] }}
+            ${{ needs.build.outputs['vsix'] }}
             ${{ needs.build.outputs['release-notes'] }}
           retention-days: 14
 

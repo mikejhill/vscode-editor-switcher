@@ -11,9 +11,9 @@ on:
       artifact-name:
         description: "Name of the uploaded build artifact"
         value: ${{ jobs.build.outputs.artifact-name }}
-      tarball:
-        description: "Tarball filename for the packaged extension"
-        value: ${{ jobs.build.outputs.tarball }}
+      vsix:
+        description: "VSIX filename for the packaged extension"
+        value: ${{ jobs.build.outputs.vsix }}
       release-notes:
         description: "Path to generated release notes from CHANGELOG"
         value: ${{ jobs.build.outputs.release-notes }}
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       artifact-name: ${{ steps.outputs.outputs.artifact-name }}
-      tarball: ${{ steps.outputs.outputs.tarball }}
+      vsix: ${{ steps.outputs.outputs.vsix }}
       release-notes: ${{ steps.outputs.outputs.release-notes }}
       version: ${{ steps.outputs.outputs.version }}
     steps:
@@ -51,6 +51,9 @@ jobs:
 
       - name: Production build
         run: npm run package
+
+      - name: Package VSIX
+        run: npm run package:vsix -- --no-git-tag-version ${{ inputs.version }}
 
       - name: Generate release notes from CHANGELOG
         shell: bash
@@ -88,17 +91,12 @@ jobs:
           fs.writeFileSync('RELEASE_NOTES.md', notes);
           NODE
 
-      - name: Archive build (dist)
-        run: |
-          TAR_NAME="dist-${{ inputs.version }}.tar.gz"
-          tar -czf "$TAR_NAME" dist
-
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-${{ inputs.version }}
           path: |
-            dist-${{ inputs.version }}.tar.gz
+            *.vsix
             RELEASE_NOTES.md
           retention-days: 30
 
@@ -106,7 +104,8 @@ jobs:
         id: outputs
         run: |
           echo "artifact-name=build-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
-          echo "tarball=dist-${{ inputs.version }}.tar.gz" >> "$GITHUB_OUTPUT"
+          VSIX_FILE=$(ls *.vsix)
+          echo "vsix=$VSIX_FILE" >> "$GITHUB_OUTPUT"
           echo "release-notes=RELEASE_NOTES.md" >> "$GITHUB_OUTPUT"
           VERSION="${{ inputs.version }}"
           echo "version=${VERSION#v}" >> "$GITHUB_OUTPUT"
