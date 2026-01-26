@@ -32,6 +32,22 @@ jobs:
         with:
           name: ${{ needs.build.outputs['artifact-name'] }}
 
+      - name: Validate VSCE_PAT token
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          if [ -z "$VSCE_PAT" ]; then
+            echo "❌ VSCE_PAT secret is not set" >&2
+            exit 1
+          fi
+          npm install -g @vscode/vsce
+          if vsce verify-pat --pat "$VSCE_PAT" 2>/dev/null; then
+            echo "✅ VSCE_PAT is valid and can publish to marketplace"
+          else
+            echo "❌ VSCE_PAT is invalid or cannot be verified" >&2
+            exit 1
+          fi
+
       - name: Validate release permissions and notes generation
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -41,7 +57,8 @@ jobs:
           gh api repos/${{ github.repository }}/releases/generate-notes \
             -f tag_name="$TAG_NAME" \
             -f target_commitish="${GITHUB_SHA}" \
-            > generated-notes.json
+            > /dev/null
+          echo "✅ GitHub release permissions verified"
 
       - name: Upload dry-run artifacts
         uses: actions/upload-artifact@v4
@@ -50,16 +67,12 @@ jobs:
           path: |
             ${{ needs.build.outputs['tarball'] }}
             ${{ needs.build.outputs['release-notes'] }}
-            generated-notes.json
           retention-days: 14
 
       - name: Summarize results
         run: |
           {
-            echo "### CHANGELOG release notes";
+            echo "### Release Notes (Dry Run for ${{ inputs.version }})";
             echo "";
             cat "${{ needs.build.outputs['release-notes'] }}";
-            echo "";
-            echo "### GitHub generated notes (proof of GitHub token check only)";
-            jq -r '.body // "<empty>"' generated-notes.json;
           } >> "$GITHUB_STEP_SUMMARY"
