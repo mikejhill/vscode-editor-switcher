@@ -11,5 +11,5 @@
 !CHANGELOG_RELEASE.md
 !LICENSE
 !package.json
-!package.nls.*.json
+!package.nls*.json
 !README.md
