@@ -1,0 +1,110 @@
+name: Release Common
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: "Version or tag name (e.g., v1.0.0)"
+        required: true
+        type: string
+    outputs:
+      artifact-name:
+        description: "Name of the uploaded build artifact"
+        value: ${{ jobs.build.outputs.artifact-name }}
+      tarball:
+        description: "Tarball filename for the packaged extension"
+        value: ${{ jobs.build.outputs.tarball }}
+      release-notes:
+        description: "Path to generated release notes from CHANGELOG"
+        value: ${{ jobs.build.outputs.release-notes }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-name: ${{ steps.outputs.outputs.artifact-name }}
+      tarball: ${{ steps.outputs.outputs.tarball }}
+      release-notes: ${{ steps.outputs.outputs.release-notes }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile (type-check, lint, bundle)
+        run: npm run compile
+
+      - name: Production build
+        run: npm run package
+
+      - name: Generate release notes from CHANGELOG
+        shell: bash
+        env:
+          VERSION_INPUT: ${{ inputs.version }}
+        run: |
+          TAG="$VERSION_INPUT"
+          VERSION="${TAG#v}"
+          if [ -z "$VERSION" ]; then
+            echo "Version input is empty after stripping leading 'v'" >&2
+            exit 1
+          fi
+          export VERSION
+          node - <<'NODE'
+          const fs = require('fs');
+          const version = process.env.VERSION;
+          if (!version) {
+            console.error('VERSION is not set');
+            process.exit(1);
+          }
+          const md = fs.readFileSync('CHANGELOG.md','utf8');
+          const header = `## [${version}]`;
+          const start = md.indexOf(header);
+          if (start === -1) {
+            console.error(`CHANGELOG.md is missing section: ${header}`);
+            process.exit(1);
+          }
+          const next = md.indexOf('\n## [', start + header.length);
+          const end = next === -1 ? md.length : next;
+          const notes = md.slice(start, end).trim();
+          if (!notes) {
+            console.error(`CHANGELOG.md section ${header} is empty`);
+            process.exit(1);
+          }
+          fs.writeFileSync('RELEASE_NOTES.md', notes);
+          NODE
+
+      - name: Archive build (dist)
+        run: |
+          TAR_NAME="dist-${{ inputs.version }}.tar.gz"
+          tar -czf "$TAR_NAME" dist
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ inputs.version }}
+          path: |
+            dist-${{ inputs.version }}.tar.gz
+            RELEASE_NOTES.md
+          retention-days: 30
+
+      - name: Set outputs
+        id: outputs
+        run: |
+          echo "artifact-name=build-${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          echo "tarball=dist-${{ inputs.version }}.tar.gz" >> "$GITHUB_OUTPUT"
+          echo "release-notes=RELEASE_NOTES.md" >> "$GITHUB_OUTPUT"

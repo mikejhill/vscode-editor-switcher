@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,73 +13,26 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release:
+  build:
+    uses: ./.github/workflows/release-common.yml
+    with:
+      version: ${{ github.ref_name }}
+    secrets: inherit
+
+  publish:
+    name: Publish Release
+    needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Compile (type-check, lint, bundle)
-        run: npm run compile
-
-      - name: Production build
-        run: npm run package
-
-      - name: Generate release notes from CHANGELOG
-        shell: bash
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          export VERSION
-          node - <<'NODE'
-          const fs = require('fs');
-          const version = process.env.VERSION;
-          if (!version) {
-            console.error('VERSION is not set');
-            process.exit(1);
-          }
-          const md = fs.readFileSync('CHANGELOG.md','utf8');
-          const header = `## [${version}]`;
-          const start = md.indexOf(header);
-          if (start === -1) {
-            console.error(`CHANGELOG.md is missing section: ${header}`);
-            process.exit(1);
-          }
-          const next = md.indexOf('\n## [', start + header.length);
-          const end = next === -1 ? md.length : next;
-          const notes = md.slice(start, end).trim();
-          if (!notes) {
-            console.error(`CHANGELOG.md section ${header} is empty`);
-            process.exit(1);
-          }
-          fs.writeFileSync('RELEASE_NOTES.md', notes);
-          NODE
-
-      - name: Archive build (dist)
-        run: |
-          tar -czf dist-${{ github.ref_name }}.tar.gz dist
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-${{ github.ref_name }}
-          path: dist-${{ github.ref_name }}.tar.gz
-          retention-days: 30
+          name: ${{ needs.build.outputs['artifact-name'] }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: RELEASE_NOTES.md
-          files: |
-            dist-${{ github.ref_name }}.tar.gz
+          body_path: ${{ needs.build.outputs['release-notes'] }}
+          files: ${{ needs.build.outputs['tarball'] }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

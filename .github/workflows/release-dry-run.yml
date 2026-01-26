@@ -1,0 +1,65 @@
+name: Release Dry Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to simulate (e.g., v1.0.0)"
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    uses: ./.github/workflows/release-common.yml
+    with:
+      version: ${{ inputs.version }}
+    secrets: inherit
+
+  dry-run:
+    name: Validate Dry Run
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs['artifact-name'] }}
+
+      - name: Validate release permissions and notes generation
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ inputs.version }}
+        run: |
+          gh api repos/${{ github.repository }} >/dev/null
+          gh api repos/${{ github.repository }}/releases/generate-notes \
+            -f tag_name="$TAG_NAME" \
+            -f target_commitish="${GITHUB_SHA}" \
+            > generated-notes.json
+
+      - name: Upload dry-run artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dry-run-${{ inputs.version }}
+          path: |
+            ${{ needs.build.outputs['tarball'] }}
+            ${{ needs.build.outputs['release-notes'] }}
+            generated-notes.json
+          retention-days: 14
+
+      - name: Summarize results
+        run: |
+          {
+            echo "### CHANGELOG release notes";
+            echo "";
+            cat "${{ needs.build.outputs['release-notes'] }}";
+            echo "";
+            echo "### GitHub generated notes (token check)";
+            jq -r '.body // "<empty>"' generated-notes.json;
+          } >> "$GITHUB_STEP_SUMMARY"
