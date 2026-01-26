@@ -1,13 +1,14 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { FileIconService } from "./fileIconService";
+import { ILogger } from "./logService";
 
 /**
  * Represents a tab item in the quick pick list.
  * Extends QuickPickItem with tab and group references.
  */
 export type TabItem = vscode.QuickPickItem & {
-  __tab: vscode.Tab;
+  __tab?: vscode.Tab;
   __group: vscode.TabGroup;
 };
 
@@ -19,7 +20,10 @@ export class TabManager {
   private activeQuickPick: vscode.QuickPick<TabItem> | undefined;
   private static commandDisposables: vscode.Disposable[] = [];
 
-  constructor(private readonly iconService: FileIconService) {}
+  constructor(
+    private readonly iconService: FileIconService,
+    private readonly log: ILogger,
+  ) {}
 
   private static disposeCommands(): void {
     TabManager.commandDisposables.forEach((d) => d.dispose());
@@ -152,7 +156,7 @@ export class TabManager {
       items.push({
         label: `Group ${group.viewColumn}`,
         kind: vscode.QuickPickItemKind.Separator,
-        __tab: group.tabs[0],
+        __tab: undefined,
         __group: group,
       });
     }
@@ -229,6 +233,9 @@ export class TabManager {
    * Focuses the appropriate editor group and opens the file.
    */
   private async openTab(item: TabItem): Promise<void> {
+    if (!item.__tab) {
+      throw new Error("Failed to open tab: tab reference is undefined");
+    }
     await this.focusGroup(item.__group);
 
     const tabIndex = item.__group.tabs.indexOf(item.__tab);
@@ -271,12 +278,19 @@ export class TabManager {
     // Try to find and reselect the same tab if it still exists
     // Use stable tab identifier instead of object reference, since tab objects are recreated on refresh
     if (activeBefore) {
+      if (!activeBefore.__tab) {
+        this.log.warn(
+          "Quick pick active item lost tab reference; skipping selection preservation",
+        );
+        return;
+      }
       const activeTabId = this.getTabIdentifier(
         activeBefore.__tab,
         activeBefore.__group,
       );
       const sameTab = this.activeQuickPick.items.find(
         (item) =>
+          item.__tab &&
           this.getTabIdentifier(item.__tab, item.__group) === activeTabId,
       );
       if (sameTab) {
@@ -371,15 +385,19 @@ export class TabManager {
     }
 
     const item = this.activeQuickPick.activeItems?.[0];
-    if (!item) {
+    if (!item || !item.__tab) {
       return;
     }
 
-    // Close without stealing focus from the picker
-    await vscode.window.tabGroups.close(item.__tab, true);
+    try {
+      // Close without stealing focus from the picker
+      await vscode.window.tabGroups.close(item.__tab, true);
 
-    // Refresh and maintain a sensible selection
-    this.refreshItemsPreservingSelection(item);
+      // Refresh and maintain a sensible selection
+      this.refreshItemsPreservingSelection(item);
+    } catch (error) {
+      this.log.error("Failed to close highlighted tab", error);
+    }
   }
 
   /**
@@ -423,26 +441,51 @@ export class TabManager {
     }
 
     const hide = async () => {
-      const qp = this.activeQuickPick;
-      this.activeQuickPick = undefined;
-      await this.setContext("editorSwitcherVisible", false);
-      qp?.dispose();
+      try {
+        const qp = this.activeQuickPick;
+        this.activeQuickPick = undefined;
+        await this.setContext("editorSwitcherVisible", false);
+        qp?.dispose();
+      } catch (error) {
+        this.log.error("Failed to hide quick pick", error);
+      }
     };
 
-    this.activeQuickPick.onDidHide(hide);
-
-    this.activeQuickPick.onDidAccept(async () => {
-      const item = this.activeQuickPick?.selectedItems?.[0];
-      if (item) {
-        await this.openTab(item);
-        await hide();
-      }
+    this.activeQuickPick.onDidHide(() => {
+      void hide();
     });
 
-    this.activeQuickPick.onDidTriggerItemButton(async (event) => {
+    this.activeQuickPick.onDidAccept(() => {
+      const item = this.activeQuickPick?.selectedItems?.[0];
+      if (!item) {
+        return;
+      }
+
+      void (async () => {
+        try {
+          await this.openTab(item);
+          await hide();
+        } catch (error) {
+          this.log.error("Failed to open tab from quick pick", error);
+        }
+      })();
+    });
+
+    this.activeQuickPick.onDidTriggerItemButton((event) => {
       const highlighted = this.activeQuickPick?.activeItems?.[0];
-      await vscode.window.tabGroups.close(event.item.__tab, true);
-      this.refreshItemsPreservingSelection(highlighted);
+      const tab = event.item.__tab;
+      if (!tab) {
+        return;
+      }
+
+      void (async () => {
+        try {
+          await vscode.window.tabGroups.close(tab, true);
+          this.refreshItemsPreservingSelection(highlighted);
+        } catch (error) {
+          this.log.error("Failed to close tab from quick pick", error);
+        }
+      })();
     });
 
     // Optional: React to tab changes while picker is open
@@ -486,14 +529,22 @@ export class TabManager {
     const openDisposable = vscode.commands.registerCommand(
       "editorSwitcher.open",
       async () => {
-        await this.showQuickPick();
+        try {
+          await this.showQuickPick();
+        } catch (error) {
+          this.log.error("Failed to open editor switcher", error);
+        }
       },
     );
 
     const closeDisposable = vscode.commands.registerCommand(
       "editorSwitcher.closeSelected",
       async () => {
-        await this.closeHighlighted();
+        try {
+          await this.closeHighlighted();
+        } catch (error) {
+          this.log.error("Failed to close highlighted tab", error);
+        }
       },
     );
 

@@ -1,7 +1,10 @@
 import * as vscode from "vscode";
 import * as path from "path";
+import { ILogger } from "./logService";
 
 export class FileIconService {
+  constructor(private readonly log: ILogger) {}
+
   inferTabIcon(tab: vscode.Tab): vscode.ThemeIcon {
     const input = tab.input as any;
     let icon: vscode.ThemeIcon;
@@ -33,6 +36,11 @@ export class FileIconService {
       icon = uri
         ? (this.iconForUri(uri) ?? vscode.ThemeIcon.File)
         : new vscode.ThemeIcon("symbol-file");
+
+      const inputType = input?.constructor?.name ?? "unknown";
+      this.log.debug(
+        `Using fallback icon for unrecognized tab input: ${inputType}`,
+      );
     }
 
     return icon;

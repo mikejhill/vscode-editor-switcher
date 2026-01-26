@@ -57,8 +57,8 @@ suite("Extension Module", () => {
 
       assert.strictEqual(
         context.subscriptions.length,
-        2,
-        "Should add exactly 2 disposables to subscriptions",
+        3,
+        "Should add logger and 2 command disposables to subscriptions",
       );
     });
 

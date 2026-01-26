@@ -2,7 +2,19 @@ import * as assert from "assert";
 import * as vscode from "vscode";
 import { FileIconService } from "../fileIconService";
 import { TabManager } from "../tabManager";
+import { ILogger } from "../logService";
 import * as sinon from "sinon";
+
+function createMockLogService(): ILogger {
+  return {
+    debug: () => {},
+    info: () => {},
+    warn: () => {},
+    error: () => {},
+    dispose: () => {},
+    outputChannel: undefined,
+  };
+}
 
 /**
  * Helper functions for creating mock objects
@@ -94,8 +106,9 @@ suite("TabManager", () => {
       .callsFake((_id: string, _cb: (...args: any[]) => any) => {
         return { dispose: () => {} } as vscode.Disposable;
       });
-    iconService = new FileIconService();
-    tabManager = new TabManager(iconService);
+    const log = createMockLogService();
+    iconService = new FileIconService(log);
+    tabManager = new TabManager(iconService, log);
   });
 
   teardown(() => {
@@ -424,8 +437,9 @@ suite("TabManager - Mock Integration Tests", () => {
       .callsFake((_id: string, _cb: (...args: any[]) => any) => {
         return { dispose: () => {} } as vscode.Disposable;
       });
-    const iconService = new FileIconService();
-    tabManager = new TabManager(iconService);
+    const log = createMockLogService();
+    const iconService = new FileIconService(log);
+    tabManager = new TabManager(iconService, log);
   });
 
   teardown(() => {

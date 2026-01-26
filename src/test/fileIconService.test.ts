@@ -1,6 +1,18 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import { FileIconService } from "../fileIconService";
+import { ILogger } from "../logService";
+
+function createMockLogService(): ILogger {
+  return {
+    debug: () => {},
+    info: () => {},
+    warn: () => {},
+    error: () => {},
+    dispose: () => {},
+    outputChannel: undefined,
+  };
+}
 
 /**
  * Helper function for creating mock tabs
@@ -36,7 +48,7 @@ suite("FileIconService", () => {
   let iconService: FileIconService;
 
   setup(() => {
-    iconService = new FileIconService();
+    iconService = new FileIconService(createMockLogService());
   });
 
   suite("inferTabIcon", () => {
@@ -367,7 +379,7 @@ suite("FileIconService - Edge Cases", () => {
   let iconService: FileIconService;
 
   setup(() => {
-    iconService = new FileIconService();
+    iconService = new FileIconService(createMockLogService());
   });
 
   test("should handle tab with empty label", () => {
