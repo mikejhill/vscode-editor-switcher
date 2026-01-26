@@ -36,18 +36,18 @@ suite("Extension Module", () => {
       );
     });
 
-    test("should register editorSwitcher.open and closeSelected commands", () => {
+    test("should register editor-switcher.open and closeSelected commands", () => {
       const ext = require("../extension");
       ext.activate(context);
 
       assert.strictEqual(registerCommandStub.callCount, 2);
       assert.strictEqual(
         registerCommandStub.firstCall.args[0],
-        "editorSwitcher.open",
+        "editor-switcher.open",
       );
       assert.strictEqual(
         registerCommandStub.secondCall.args[0],
-        "editorSwitcher.closeSelected",
+        "editor-switcher.closeSelected",
       );
     });
 

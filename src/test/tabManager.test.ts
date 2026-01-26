@@ -452,7 +452,7 @@ suite("TabManager", () => {
       getConfigurationStub = sinon
         .stub(vscode.workspace, "getConfiguration")
         .callsFake((section?: string) => {
-          if (section === "editorSwitcher") {
+          if (section === "editor-switcher") {
             return {
               get: (key: string, defaultValue: any) => {
                 const defaults: Record<string, any> = {
@@ -486,7 +486,7 @@ suite("TabManager", () => {
       getConfigurationStub = sinon
         .stub(vscode.workspace, "getConfiguration")
         .callsFake((section?: string) => {
-          if (section === "editorSwitcher") {
+          if (section === "editor-switcher") {
             return {
               get: (key: string, defaultValue: any) => {
                 if (key === "onCloseKeepGroupFocus") {
@@ -515,7 +515,7 @@ suite("TabManager", () => {
       getConfigurationStub = sinon
         .stub(vscode.workspace, "getConfiguration")
         .callsFake((section?: string) => {
-          if (section === "editorSwitcher") {
+          if (section === "editor-switcher") {
             return {
               get: (key: string, defaultValue: any) => {
                 if (key === "onCloseKeepGroupFocus") {
@@ -547,7 +547,7 @@ suite("TabManager", () => {
       getConfigurationStub = sinon
         .stub(vscode.workspace, "getConfiguration")
         .callsFake((section?: string) => {
-          if (section === "editorSwitcher") {
+          if (section === "editor-switcher") {
             return {
               get: (key: string, defaultValue: any) => {
                 if (key === "onCloseKeepGroupFocus") {
@@ -580,7 +580,7 @@ suite("TabManager", () => {
       getConfigurationStub = sinon
         .stub(vscode.workspace, "getConfiguration")
         .callsFake((section?: string) => {
-          if (section === "editorSwitcher") {
+          if (section === "editor-switcher") {
             return {
               get: (key: string, defaultValue: any) => {
                 if (key === "onCloseKeepGroupFocus") {
@@ -703,7 +703,7 @@ suite("TabManager", () => {
       getConfigurationStub = sinon
         .stub(vscode.workspace, "getConfiguration")
         .callsFake((section?: string) => {
-          if (section === "editorSwitcher") {
+          if (section === "editor-switcher") {
             return {
               get: (key: string, defaultValue: any) => {
                 if (key === "onCloseKeepGroupFocus") {
@@ -783,7 +783,7 @@ suite("TabManager", () => {
       getConfigurationStub = sinon
         .stub(vscode.workspace, "getConfiguration")
         .callsFake((section?: string) => {
-          if (section === "editorSwitcher") {
+          if (section === "editor-switcher") {
             return {
               get: (key: string, defaultValue: any) => {
                 if (key === "onCloseKeepGroupFocus") {
@@ -837,7 +837,7 @@ suite("TabManager", () => {
       getConfigurationStub = sinon
         .stub(vscode.workspace, "getConfiguration")
         .callsFake((section?: string) => {
-          if (section === "editorSwitcher") {
+          if (section === "editor-switcher") {
             return {
               get: (key: string, defaultValue: any) => {
                 if (key === "onCloseKeepGroupFocus") {
@@ -1020,8 +1020,8 @@ suite("TabManager - Mock Integration Tests", () => {
  */
 suite("TabManager - Live Integration Tests", () => {
   const EXTENSION_ID = "mikejhill.vscode-editor-switcher";
-  const OPEN_COMMAND = "editorSwitcher.open";
-  const CLOSE_COMMAND = "editorSwitcher.closeSelected";
+  const OPEN_COMMAND = "editor-switcher.open";
+  const CLOSE_COMMAND = "editor-switcher.closeSelected";
 
   let extension: vscode.Extension<any> | undefined;
 
@@ -1061,18 +1061,18 @@ suite("TabManager - Live Integration Tests", () => {
       );
     });
 
-    test("editorSwitcher.open command should be executable", async () => {
+    test("editor-switcher.open command should be executable", async () => {
       await assert.doesNotReject(async () => {
         const commandPromise = vscode.commands.executeCommand(OPEN_COMMAND);
         await vscode.commands.executeCommand("workbench.action.closeQuickOpen");
         await commandPromise;
-      }, "editorSwitcher.open should execute without errors");
+      }, "editor-switcher.open should execute without errors");
     });
 
-    test("editorSwitcher.closeSelected command should be executable", async () => {
+    test("editor-switcher.closeSelected command should be executable", async () => {
       await assert.doesNotReject(
         async () => await vscode.commands.executeCommand(CLOSE_COMMAND),
-        "editorSwitcher.closeSelected should execute without errors",
+        "editor-switcher.closeSelected should execute without errors",
       );
     });
   });

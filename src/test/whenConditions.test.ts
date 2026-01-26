@@ -14,8 +14,8 @@ import * as vscode from "vscode";
  */
 suite("When Conditions and Context Management", () => {
   const EXTENSION_ID = "mikejhill.vscode-editor-switcher";
-  const OPEN_COMMAND = "editorSwitcher.open";
-  const CLOSE_COMMAND = "editorSwitcher.closeSelected";
+  const OPEN_COMMAND = "editor-switcher.open";
+  const CLOSE_COMMAND = "editor-switcher.closeSelected";
   const CONTEXT_KEY = "editorSwitcherVisible";
 
   async function openTempDocuments(
@@ -85,20 +85,20 @@ suite("When Conditions and Context Management", () => {
       );
     });
 
-    test("editorSwitcher.open command should be executable", async () => {
+    test("editor-switcher.open command should be executable", async () => {
       // Command should exist and be callable (even if we immediately cancel the quick pick)
       await assert.doesNotReject(async () => {
         const commandPromise = vscode.commands.executeCommand(OPEN_COMMAND);
         await vscode.commands.executeCommand("workbench.action.closeQuickOpen");
         await commandPromise;
-      }, "editorSwitcher.open should execute without errors");
+      }, "editor-switcher.open should execute without errors");
     });
 
-    test("editorSwitcher.closeSelected command should be executable", async () => {
+    test("editor-switcher.closeSelected command should be executable", async () => {
       // This command can be called but won't do anything unless the quick pick is open
       await assert.doesNotReject(
         async () => await vscode.commands.executeCommand(CLOSE_COMMAND),
-        "editorSwitcher.closeSelected should execute without errors",
+        "editor-switcher.closeSelected should execute without errors",
       );
     });
   });
@@ -107,7 +107,7 @@ suite("When Conditions and Context Management", () => {
     test("commands should follow naming convention", async () => {
       const allCommands = await vscode.commands.getCommands(true);
       const extensionCommands = allCommands.filter((cmd) =>
-        cmd.startsWith("editorSwitcher."),
+        cmd.startsWith("editor-switcher."),
       );
 
       assert.ok(
@@ -117,7 +117,7 @@ suite("When Conditions and Context Management", () => {
 
       extensionCommands.forEach((cmd) => {
         assert.ok(
-          cmd.startsWith("editorSwitcher."),
+          cmd.startsWith("editor-switcher."),
           `Command ${cmd} should follow naming convention`,
         );
       });

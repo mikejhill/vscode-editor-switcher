@@ -24,40 +24,39 @@
   "contributes": {
     "commands": [
       {
-        "command": "editorSwitcher.open",
-        "title": "%command.editorSwitcher.open%"
+        "command": "editor-switcher.open",
+        "title": "%command.open%"
       },
       {
-        "command": "editorSwitcher.closeSelected",
-        "title": "%command.editorSwitcher.closeSelected%",
+        "command": "editor-switcher.closeSelected",
+        "title": "%command.closeSelected%",
         "enablement": "editorSwitcherVisible"
       }
     ],
     "keybindings": [
       {
-        "command": "editorSwitcher.open",
+        "command": "editor-switcher.open",
         "key": "ctrl+alt+e"
       },
       {
-        "command": "editorSwitcher.closeSelected",
+        "command": "editor-switcher.closeSelected",
         "key": "ctrl+w",
         "when": "editorSwitcherVisible"
       }
     ],
     "configuration": {
-      "title": "%configuration.editorSwitcher.title%",
-      "id": "editorSwitcher",
+      "title": "%configuration.title%",
       "properties": {
-        "editorSwitcher.onCloseKeepGroupFocus": {
+        "editor-switcher.onCloseKeepGroupFocus": {
           "type": "boolean",
-          "description": "%configuration.editorSwitcher.onCloseKeepGroupFocus.description%",
+          "description": "%configuration.onCloseKeepGroupFocus.description%",
           "order": 10,
           "default": true,
           "scope": "window"
         },
-        "editorSwitcher.onCloseSelectTabStrategy": {
+        "editor-switcher.onCloseSelectTabStrategy": {
           "type": "string",
-          "description": "%configuration.editorSwitcher.onCloseSelectTabStrategy.description%",
+          "description": "%configuration.onCloseSelectTabStrategy.description%",
           "order": 20,
           "default": "selectNext",
           "enum": [
@@ -65,12 +64,12 @@
             "selectPrevious"
           ],
           "enumItemLabels": [
-            "%configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel%",
-            "%configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel%"
+            "%configuration.onCloseSelectTabStrategy.selectNextLabel%",
+            "%configuration.onCloseSelectTabStrategy.selectPreviousLabel%"
           ],
           "enumDescriptions": [
-            "%configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext%",
-            "%configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious%"
+            "%configuration.onCloseSelectTabStrategy.selectNext%",
+            "%configuration.onCloseSelectTabStrategy.selectPrevious%"
           ],
           "scope": "window"
         }

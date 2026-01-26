@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // Register commands
   const openDisposable = vscode.commands.registerCommand(
-    "editorSwitcher.open",
+    "editor-switcher.open",
     async () => {
       try {
         await tabManager?.showQuickPick();
@@ -28,7 +28,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   const closeDisposable = vscode.commands.registerCommand(
-    "editorSwitcher.closeSelected",
+    "editor-switcher.closeSelected",
     async () => {
       try {
         await tabManager?.closeHighlighted();
