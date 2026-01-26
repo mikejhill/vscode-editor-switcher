@@ -1,15 +1,17 @@
-import * as assert from 'assert';
+import * as assert from "assert";
 
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-import * as vscode from 'vscode';
-// import * as myExtension from '../../extension';
+/**
+ * Extension Module Tests
+ * Tests main extension activation and deactivation
+ */
+suite("Extension Module", () => {
+  test("should export activate function", () => {
+    // Module-level validation
+    assert.ok(typeof require("../extension").activate === "function");
+  });
 
-suite('Extension Test Suite', () => {
-	vscode.window.showInformationMessage('Start all tests.');
-
-	test('Sample test', () => {
-		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
-	});
+  test("should export deactivate function", () => {
+    // Module-level validation
+    assert.ok(typeof require("../extension").deactivate === "function");
+  });
 });
