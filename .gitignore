@@ -156,5 +156,4 @@ vite.config.ts.timestamp-*
 
 
 ### Custom
-# Store in i18n/; copy during build
-/package.nls*.json
+# Empty for now
