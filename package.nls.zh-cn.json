@@ -1,4 +1,4 @@
 {
-    "command.editorSwitcher.open": "Editor Switcher: Open",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: Close highlighted editor"
+    "command.editorSwitcher.open": "Editor Switcher: 打开",
+    "command.editorSwitcher.closeSelected": "Editor Switcher: 关闭突出显示的编辑器"
 }

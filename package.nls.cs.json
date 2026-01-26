@@ -1,4 +1,4 @@
 {
-    "command.editorSwitcher.open": "Editor Switcher: Open",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: Close highlighted editor"
+    "command.editorSwitcher.open": "Editor Switcher: Otevřít",
+    "command.editorSwitcher.closeSelected": "Editor Switcher: Zavřít zvýrazněný editor"
 }
