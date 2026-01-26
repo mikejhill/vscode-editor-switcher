@@ -76,7 +76,7 @@ jobs:
         shell: bash
         run: |
           DATE_VER="0.0.0-dev$(date +%Y%m%d%H%M%S)"
-          npm run package:vsix -- --no-git-tag-version "$DATE_VER"
+          npm run package:vsix -- --no-git-tag-version --ignoreFile .vscodeignore-dev "$DATE_VER"
 
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4

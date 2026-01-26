@@ -1,0 +1,14 @@
+## VSIX ignore file for development builds
+
+# Ignore everything by default
+**
+
+# Whitelist extension files
+!dist/**.js
+!images/icon-256.png
+!l10n/**
+!CHANGELOG.md
+!LICENSE
+!package.json
+!package.nls.*.json
+!README.md
