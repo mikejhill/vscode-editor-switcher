@@ -41,7 +41,7 @@ jobs:
             exit 1
           fi
           npm install -g @vscode/vsce
-          if vsce verify-pat --pat "$VSCE_PAT" 2>/dev/null; then
+          if vsce verify-pat --pat "$VSCE_PAT"; then
             echo "✅ VSCE_PAT is valid and can publish to marketplace"
           else
             echo "❌ VSCE_PAT is invalid or cannot be verified" >&2
