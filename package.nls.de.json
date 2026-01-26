@@ -1,12 +1,11 @@
 {
-    "command.editorSwitcher.open": "Editor Switcher: Öffnen",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: Markierten Editor schließen",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.title": "Keep group focus on close",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "Gruppenfokus beim Schließen beibehalten. Wenn true, versucht die Quick-Pick-Auswahl, nach dem Schließen eines markierten Tabs den Fokus auf den nächstgelegenen Tab in derselben Gruppe zu behalten. Andernfalls wechselt die Dialogauswahl beim Schließen zwischen Gruppen basierend auf der ausgewählten Erweiterungs-Tab-Auswahlstrategie.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.title": "On close tab select strategy",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "On close tab select strategy: Controls which tab is selected after closing a highlighted tab via the quick pick dialog. This only affects the quick pick dialog, and it does not impact built-in editor tab selection if the closed tab was active.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "Select next",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "Select previous",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "Move focus to the next tab in the quick pick dialog.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "Move focus to the prior tab in the quick pick dialog."
+    "command.open": "Editor Switcher: Öffnen",
+    "command.closeSelected": "Editor Switcher: Markierten Editor schließen",
+    "configuration.title": "Editor Switcher",
+    "configuration.onCloseKeepGroupFocus.description": "Gruppenfokus beim Schließen beibehalten. Wenn true, versucht die Quick-Pick-Auswahl, nach dem Schließen eines markierten Tabs den Fokus auf den nächstgelegenen Tab in derselben Gruppe zu behalten. Andernfalls wechselt die Dialogauswahl beim Schließen zwischen Gruppen basierend auf der ausgewählten Erweiterungs-Tab-Auswahlstrategie.",
+    "configuration.onCloseSelectTabStrategy.description": "Tab-Auswahlstrategie beim Schließen: Steuert, welcher Tab nach dem Schließen eines markierten Tabs über den Quick-Pick-Dialog ausgewählt wird. Dies betrifft nur den Quick-Pick-Dialog und hat keine Auswirkungen auf die integrierte Editor-Tab-Auswahl, wenn der geschlossene Tab aktiv war.",
+    "configuration.onCloseSelectTabStrategy.selectNextLabel": "Nächsten auswählen",
+    "configuration.onCloseSelectTabStrategy.selectPreviousLabel": "Vorherigen auswählen",
+    "configuration.onCloseSelectTabStrategy.selectNext": "Fokus auf den nächsten Tab im Quick-Pick-Dialog verschieben.",
+    "configuration.onCloseSelectTabStrategy.selectPrevious": "Fokus auf den vorherigen Tab im Quick-Pick-Dialog verschieben."
 }

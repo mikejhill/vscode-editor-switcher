@@ -1,12 +1,11 @@
 {
-    "command.editorSwitcher.open": "Editor Switcher: 開く",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: ハイライトされたエディタを閉じる",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.title": "閉じるときにグループフォーカスを保持",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "閉じるときにグループのフォーカスを維持します。true の場合、クイックピック ダイアログの選択は、強調表示されたタブを閉じた後に同じグループ内の最も近いタブへのフォーカスを維持しようとします。そうでない場合、ダイアログの選択は選択した拡張機能のタブ選択戦略に基づいて閉じる際にグループ間を移動します。",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.title": "閉じるタブ選択戦略",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "閉じるタブ選択戦略：クイックピックダイアログを介してハイライトされたタブを閉じた後にどのタブが選択されるかを制御します。これはクイックピックダイアログにのみ影響し、閉じたタブがアクティブであった場合の組み込みエディタタブ選択には影響しません。",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "次を選択",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "前を選択",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "クイックピックダイアログで次のタブにフォーカスを移動します。",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "クイックピックダイアログで前のタブにフォーカスを移動します。"
+    "command.open": "Editor Switcher: 開く",
+    "command.closeSelected": "Editor Switcher: ハイライトされたエディタを閉じる",
+    "configuration.title": "Editor Switcher",
+    "configuration.onCloseKeepGroupFocus.description": "閉じるときにグループのフォーカスを維持します。true の場合、クイックピック ダイアログの選択は、強調表示されたタブを閉じた後に同じグループ内の最も近いタブへのフォーカスを維持しようとします。そうでない場合、ダイアログの選択は選択した拡張機能のタブ選択戦略に基づいて閉じる際にグループ間を移動します。",
+    "configuration.onCloseSelectTabStrategy.description": "閉じるタブ選択戦略：クイックピックダイアログを介してハイライトされたタブを閉じた後にどのタブが選択されるかを制御します。これはクイックピックダイアログにのみ影響し、閉じたタブがアクティブであった場合の組み込みエディタタブ選択には影響しません。",
+    "configuration.onCloseSelectTabStrategy.selectNextLabel": "次を選択",
+    "configuration.onCloseSelectTabStrategy.selectPreviousLabel": "前を選択",
+    "configuration.onCloseSelectTabStrategy.selectNext": "クイックピックダイアログで次のタブにフォーカスを移動します。",
+    "configuration.onCloseSelectTabStrategy.selectPrevious": "クイックピックダイアログで前のタブにフォーカスを移動します。"
 }

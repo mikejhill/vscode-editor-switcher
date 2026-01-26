@@ -1,12 +1,11 @@
 {
-    "command.editorSwitcher.open": "Editor Switcher: Ouvrir",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: Fermer l'éditeur en surbrillance",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.title": "Keep group focus on close",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "Conserver le focus du groupe lors de la fermeture. Si true, la sélection du dialogue de sélection rapide tentera de conserver le focus sur l’onglet le plus proche dans le même groupe après la fermeture d’un onglet mis en surbrillance. Sinon, la sélection du dialogue se déplacera entre les groupes à la fermeture en fonction de la stratégie de sélection d’onglets de l’extension choisie.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.title": "On close tab select strategy",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "On close tab select strategy: Controls which tab is selected after closing a highlighted tab via the quick pick dialog. This only affects the quick pick dialog, and it does not impact built-in editor tab selection if the closed tab was active.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "Select next",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "Select previous",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "Move focus to the next tab in the quick pick dialog.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "Move focus to the prior tab in the quick pick dialog."
+    "command.open": "Editor Switcher: Ouvrir",
+    "command.closeSelected": "Editor Switcher: Fermer l'éditeur en surbrillance",
+    "configuration.title": "Editor Switcher",
+    "configuration.onCloseKeepGroupFocus.description": "Conserver le focus du groupe lors de la fermeture. Si true, la sélection du dialogue de sélection rapide tentera de conserver le focus sur l'onglet le plus proche dans le même groupe après la fermeture d'un onglet mis en surbrillance. Sinon, la sélection du dialogue se déplacera entre les groupes à la fermeture en fonction de la stratégie de sélection d'onglets de l'extension choisie.",
+    "configuration.onCloseSelectTabStrategy.description": "Stratégie de sélection d'onglet à la fermeture : Contrôle quel onglet est sélectionné après la fermeture d'un onglet mis en surbrillance via le dialogue de sélection rapide. Cela n'affecte que le dialogue de sélection rapide et n'impacte pas la sélection d'onglet de l'éditeur intégré si l'onglet fermé était actif.",
+    "configuration.onCloseSelectTabStrategy.selectNextLabel": "Sélectionner suivant",
+    "configuration.onCloseSelectTabStrategy.selectPreviousLabel": "Sélectionner précédent",
+    "configuration.onCloseSelectTabStrategy.selectNext": "Déplacer le focus vers l'onglet suivant dans le dialogue de sélection rapide.",
+    "configuration.onCloseSelectTabStrategy.selectPrevious": "Déplacer le focus vers l'onglet précédent dans le dialogue de sélection rapide."
 }

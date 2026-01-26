@@ -1,11 +1,11 @@
 {
-    "command.editorSwitcher.open": "Editor Switcher: Apri",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: Chiudi editor evidenziato""configuration.editorSwitcher.onCloseKeepGroupFocus.title": "Keep group focus on close",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "Mantieni il focus del gruppo alla chiusura. Se true, la selezione del quick pick tenterà di mantenere il focus sulla scheda più vicina dello stesso gruppo dopo la chiusura di una scheda evidenziata. Altrimenti, la selezione del dialogo si sposterà tra i gruppi alla chiusura in base alla strategia di selezione delle schede dell'estensione scelta.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.title": "On close tab select strategy",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "On close tab select strategy: Controls which tab is selected after closing a highlighted tab via the quick pick dialog. This only affects the quick pick dialog, and it does not impact built-in editor tab selection if the closed tab was active.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "Select next",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "Select previous",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "Move focus to the next tab in the quick pick dialog.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "Move focus to the prior tab in the quick pick dialog."
+    "command.open": "Editor Switcher: Apri",
+    "command.closeSelected": "Editor Switcher: Chiudi editor evidenziato",
+    "configuration.title": "Editor Switcher",
+    "configuration.onCloseKeepGroupFocus.description": "Mantieni il focus del gruppo alla chiusura. Se true, la selezione del quick pick tenterà di mantenere il focus sulla scheda più vicina dello stesso gruppo dopo la chiusura di una scheda evidenziata. Altrimenti, la selezione del dialogo si sposterà tra i gruppi alla chiusura in base alla strategia di selezione delle schede dell'estensione scelta.",
+    "configuration.onCloseSelectTabStrategy.description": "Strategia di selezione scheda alla chiusura: Controlla quale scheda viene selezionata dopo la chiusura di una scheda evidenziata tramite il dialogo di quick pick. Questo influisce solo sul dialogo di quick pick e non impatta la selezione delle schede dell'editor integrato se la scheda chiusa era attiva.",
+    "configuration.onCloseSelectTabStrategy.selectNextLabel": "Seleziona successiva",
+    "configuration.onCloseSelectTabStrategy.selectPreviousLabel": "Seleziona precedente",
+    "configuration.onCloseSelectTabStrategy.selectNext": "Sposta il focus sulla scheda successiva nel dialogo di quick pick.",
+    "configuration.onCloseSelectTabStrategy.selectPrevious": "Sposta il focus sulla scheda precedente nel dialogo di quick pick."
 }

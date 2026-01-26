@@ -1,12 +1,11 @@
 {
-    "command.editorSwitcher.open": "Editor Switcher: Abrir",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: Cerrar editor resaltado",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.title": "Keep group focus on close",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "Mantener el foco de grupo al cerrar. Si es true, la selección del cuadro de diálogo de selección rápida intentará mantener el foco en la pestaña más cercana del mismo grupo después de cerrar una pestaña resaltada. De lo contrario, la selección del cuadro de diálogo se moverá entre grupos al cerrar según la estrategia de selección de pestañas de la extensión elegida.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.title": "On close tab select strategy",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "On close tab select strategy: Controls which tab is selected after closing a highlighted tab via the quick pick dialog. This only affects the quick pick dialog, and it does not impact built-in editor tab selection if the closed tab was active.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "Select next",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "Select previous",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "Move focus to the next tab in the quick pick dialog.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "Move focus to the prior tab in the quick pick dialog."
+    "command.open": "Editor Switcher: Abrir",
+    "command.closeSelected": "Editor Switcher: Cerrar editor resaltado",
+    "configuration.title": "Editor Switcher",
+    "configuration.onCloseKeepGroupFocus.description": "Mantener el foco de grupo al cerrar. Si es true, la selección del cuadro de diálogo de selección rápida intentará mantener el foco en la pestaña más cercana del mismo grupo después de cerrar una pestaña resaltada. De lo contrario, la selección del cuadro de diálogo se moverá entre grupos al cerrar según la estrategia de selección de pestañas de la extensión elegida.",
+    "configuration.onCloseSelectTabStrategy.description": "Estrategia de selección de pestañas al cerrar: Controla qué pestaña se selecciona después de cerrar una pestaña resaltada a través del cuadro de diálogo de selección rápida. Esto solo afecta al cuadro de diálogo de selección rápida y no impacta la selección de pestañas del editor integrado si la pestaña cerrada estaba activa.",
+    "configuration.onCloseSelectTabStrategy.selectNextLabel": "Seleccionar siguiente",
+    "configuration.onCloseSelectTabStrategy.selectPreviousLabel": "Seleccionar anterior",
+    "configuration.onCloseSelectTabStrategy.selectNext": "Mover el foco a la siguiente pestaña en el cuadro de diálogo de selección rápida.",
+    "configuration.onCloseSelectTabStrategy.selectPrevious": "Mover el foco a la pestaña anterior en el cuadro de diálogo de selección rápida."
 }

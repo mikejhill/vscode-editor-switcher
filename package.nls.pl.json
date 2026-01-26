@@ -1,12 +1,11 @@
 {
-    "command.editorSwitcher.open": "Editor Switcher: Otwórz",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: Zamknij wyróżniony edytor",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.title": "Keep group focus on close",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "Zachowaj fokus grupy przy zamykaniu. Jeśli true, wybór w oknie szybkiego wyboru spróbuje zachować fokus na najbliższej karcie w tej samej grupie po zamknięciu wyróżnionej karty. W przeciwnym razie wybór w oknie dialogowym będzie przechodził między grupami przy zamykaniu na podstawie wybranej strategii wyboru kart rozszerzenia.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.title": "On close tab select strategy",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "On close tab select strategy: Controls which tab is selected after closing a highlighted tab via the quick pick dialog. This only affects the quick pick dialog, and it does not impact built-in editor tab selection if the closed tab was active.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "Select next",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "Select previous",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "Move focus to the next tab in the quick pick dialog.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "Move focus to the prior tab in the quick pick dialog."
+    "command.open": "Editor Switcher: Otwórz",
+    "command.closeSelected": "Editor Switcher: Zamknij wyróżniony edytor",
+    "configuration.title": "Editor Switcher",
+    "configuration.onCloseKeepGroupFocus.description": "Zachowaj fokus grupy przy zamykaniu. Jeśli true, wybór w oknie szybkiego wyboru spróbuje zachować fokus na najbliższej karcie w tej samej grupie po zamknięciu wyróżnionej karty. W przeciwnym razie wybór w oknie dialogowym będzie przechodził między grupami przy zamykaniu na podstawie wybranej strategii wyboru kart rozszerzenia.",
+    "configuration.onCloseSelectTabStrategy.description": "Strategia wyboru karty przy zamykaniu: Kontroluje, która karta jest wybierana po zamknięciu wyróżnionej karty przez okno szybkiego wyboru. Wpływa to tylko na okno szybkiego wyboru i nie ma wpływu na wybór karty wbudowanego edytora, jeśli zamknięta karta była aktywna.",
+    "configuration.onCloseSelectTabStrategy.selectNextLabel": "Wybierz następną",
+    "configuration.onCloseSelectTabStrategy.selectPreviousLabel": "Wybierz poprzednią",
+    "configuration.onCloseSelectTabStrategy.selectNext": "Przenieś fokus na następną kartę w oknie szybkiego wyboru.",
+    "configuration.onCloseSelectTabStrategy.selectPrevious": "Przenieś fokus na poprzednią kartę w oknie szybkiego wyboru."
 }

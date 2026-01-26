@@ -1,12 +1,11 @@
 {
-    "command.editorSwitcher.open": "Editor Switcher: 開啟",
-    "command.editorSwitcher.closeSelected": "Editor Switcher: 關閉醒目提示的編輯器",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.title": "Keep group focus on close",
-    "configuration.editorSwitcher.onCloseKeepGroupFocus.description": "關閉時保持群組焦點。若為 true，快速選擇對話方塊的選取會在關閉醒目提示的索引標籤後嘗試將焦點保留在同一群組中最近的索引標籤上；否則，對話方塊選取會在關閉時依所選擴充功能的索引標籤選取策略在群組間移動。",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.title": "On close tab select strategy",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.description": "On close tab select strategy: Controls which tab is selected after closing a highlighted tab via the quick pick dialog. This only affects the quick pick dialog, and it does not impact built-in editor tab selection if the closed tab was active.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNextLabel": "Select next",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPreviousLabel": "Select previous",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectNext": "Move focus to the next tab in the quick pick dialog.",
-    "configuration.editorSwitcher.onCloseSelectTabStrategy.selectPrevious": "Move focus to the prior tab in the quick pick dialog."
+    "command.open": "Editor Switcher: 開啟",
+    "command.closeSelected": "Editor Switcher: 關閉醒目提示的編輯器",
+    "configuration.title": "Editor Switcher",
+    "configuration.onCloseKeepGroupFocus.description": "關閉時保持群組焦點。若為 true，快速選擇對話方塊的選取會在關閉醒目提示的索引標籤後嘗試將焦點保留在同一群組中最近的索引標籤上；否則，對話方塊選取會在關閉時依所選擴充功能的索引標籤選取策略在群組間移動。",
+    "configuration.onCloseSelectTabStrategy.description": "關閉索引標籤選取策略：控制透過快速選擇對話方塊關閉醒目提示的索引標籤後選取哪個索引標籤。這僅影響快速選擇對話方塊，如果已關閉的索引標籤處於使用中狀態，則不會影響內建編輯器索引標籤選取。",
+    "configuration.onCloseSelectTabStrategy.selectNextLabel": "選取下一個",
+    "configuration.onCloseSelectTabStrategy.selectPreviousLabel": "選取上一個",
+    "configuration.onCloseSelectTabStrategy.selectNext": "在快速選擇對話方塊中將焦點移至下一個索引標籤。",
+    "configuration.onCloseSelectTabStrategy.selectPrevious": "在快速選擇對話方塊中將焦點移至上一個索引標籤。"
 }
