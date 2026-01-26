@@ -89,20 +89,13 @@ jobs:
           }
           fs.writeFileSync('RELEASE_NOTES.md', notes);
 
-          // Generate CHANGELOG without Unreleased section
-          const unreleasedStart = md.indexOf('## [Unreleased]');
-          if (unreleasedStart !== -1) {
-            const unreleasedEnd = md.indexOf('\n## [', unreleasedStart + 1);
-            if (unreleasedEnd !== -1) {
-              const beforeUnreleased = md.slice(0, unreleasedStart);
-              const afterUnreleased = md.slice(unreleasedEnd + 1);
-              fs.writeFileSync('CHANGELOG_RELEASE.md', beforeUnreleased + afterUnreleased);
-            } else {
-              fs.writeFileSync('CHANGELOG_RELEASE.md', md.slice(0, unreleasedStart));
-            }
-          } else {
-            fs.writeFileSync('CHANGELOG_RELEASE.md', md);
+          // Write CHANGELOG_RELEASE.md: from version header to end of file
+          if (start === -1) {
+            console.error(`CHANGELOG.md is missing section: ${header}`);
+            process.exit(1);
           }
+          const changelogRelease = md.slice(start).trimStart();
+          fs.writeFileSync('CHANGELOG_RELEASE.md', changelogRelease);
           NODE
 
       - name: Package VSIX
