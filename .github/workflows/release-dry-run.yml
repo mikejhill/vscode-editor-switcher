@@ -27,6 +27,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      # Checkout to pull publisher from package.json (avoid maintaining duplicate elsewhere)
       - name: Checkout
         uses: actions/checkout@v4
 
