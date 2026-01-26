@@ -27,7 +27,7 @@ Do NOT update for:
 
 ### How to Update CHANGELOG.md
 
-1. Add entries under `[Unreleased]` section
+1. Add new entries under `[Unreleased]` section
 2. Use appropriate category heading:
    - `### Added` - new features
    - `### Changed` - changes in existing functionality
@@ -41,6 +41,7 @@ Do NOT update for:
    - Be clear and user-focused
    - Include issue/PR numbers when applicable: (#123)
    - Add blank line after section heading
+   - No blank lines between bullets
    - Ensure file ends with single newline
 
 ### Example Format
