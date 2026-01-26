@@ -1,14 +1,12 @@
-.vscode/**
-.vscode-test/**
-out/**
-node_modules/**
-src/**
-.gitignore
-.yarnrc
-esbuild.js
-vsc-extension-quickstart.md
-**/tsconfig.json
-**/eslint.config.mjs
-**/*.map
-**/*.ts
-**/.vscode-test.*
+# Ignore everything by default
+**
+
+# Whitelist extension files
+!dist/**.js
+!images/icon-256.png
+!l10n/**
+!CHANGELOG.md
+!LICENSE
+!package.json
+!package.nls.*.json
+!README.md
