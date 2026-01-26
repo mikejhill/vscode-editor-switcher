@@ -11,8 +11,8 @@ Quickly move between open editors with a QuickPick that also lets you close the 
 
 ## Commands
 
-- Editor Switcher: Open (`editorsQuickPick.open`)
-- Editor Switcher: Close highlighted editor (`editorsQuickPick.closeSelected`)
+- Editor Switcher: Open (`editorSwitcher.open`)
+- Editor Switcher: Close highlighted editor (`editorSwitcher.closeSelected`)
 
 ## Default keybindings
 
