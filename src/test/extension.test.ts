@@ -11,7 +11,7 @@ suite("Extension Module", () => {
     let registerCommandStub: sinon.SinonStub;
     let context: any;
 
-    beforeEach(() => {
+    setup(() => {
       context = {
         subscriptions: [],
         extensionPath: "/mock/path",
@@ -22,7 +22,7 @@ suite("Extension Module", () => {
         .stub(vscode.commands, "registerCommand")
         .returns({ dispose: () => {} });
     });
-    afterEach(() => {
+    teardown(() => {
       registerCommandStub.restore();
     });
 
