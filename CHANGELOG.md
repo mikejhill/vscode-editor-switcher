@@ -11,8 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `editorSwitcher.onCloseKeepGroupFocus` setting to keep selection in the same editor group after closing from the picker when possible. If true, the quick pick dialog selection will try to stay on the nearest tab in the same group; otherwise, it will move between groups based on the extension’s tab selection strategy.
-- Add `editorSwitcher.onCloseSelectTabStrategy` setting to control which tab is selected after closing a highlighted tab via the quick pick dialog (options: "selectNext" or "selectPrevious"). This only affects the quick pick dialog and does not impact built-in editor tab selection if the closed tab was active.
+- Add `editor-switcher.onCloseKeepGroupFocus` setting to keep selection in the same editor group after closing from the picker when possible. If true, the quick pick dialog selection will try to stay on the nearest tab in the same group; otherwise, it will move between groups based on the extension’s tab selection strategy.
+- Add `editor-switcher.onCloseSelectTabStrategy` setting to control which tab is selected after closing a highlighted tab via the quick pick dialog (options: "selectNext" or "selectPrevious"). This only affects the quick pick dialog and does not impact built-in editor tab selection if the closed tab was active.
+- Changed extension ID, commands, and configurations to all use the key `editor-switcher`.
 - Localize titles and descriptions for new close-behavior settings across bundled language packs.
 - Add comprehensive unit and integration tests for new settings and selection behavior
 - Improve existing test assertions for increased reliability
@@ -41,7 +42,7 @@ Initial release:
 - Dirty markers for unsaved files
 - Visual separators between editor groups
 - Close button on picker items for mouse users
-- Core commands: editorSwitcher.open, editorSwitcher.closeSelected
+- Core commands: editor-switcher.open, editor-switcher.closeSelected
 - Integration tests for end-to-end functionality
 
 [Unreleased]: https://github.com/mikejhill/vscode-editor-switcher/compare/v1.0.2...HEAD
