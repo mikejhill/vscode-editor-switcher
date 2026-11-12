@@ -5,7 +5,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const Jimp = require("jimp");
+const { Jimp, ResizeStrategy } = require("jimp");
 
 function parseArgs(argv) {
   const args = {};
@@ -77,9 +77,9 @@ async function main() {
   for (const size of sizes) {
     try {
       const cloned = image.clone();
-      cloned.resize(size, size, Jimp.RESIZE_BILINEAR);
+      cloned.resize({ w: size, h: size, mode: ResizeStrategy.BILINEAR });
       const outPath = path.join(absOut, `icon-${size}.png`);
-      await cloned.writeAsync(outPath);
+      await cloned.write(outPath);
       console.log(`✔ icon-${size}.png`);
     } catch (e) {
       console.error(`✖ Failed to generate size ${size}: ${e.message}`);
