@@ -28,12 +28,12 @@ export class TabManager {
   ) {}
 
   private get onCloseKeepGroupFocus(): boolean {
-    const config = vscode.workspace.getConfiguration("editorSwitcher");
+    const config = vscode.workspace.getConfiguration("editor-switcher");
     return config.get<boolean>("onCloseKeepGroupFocus", true);
   }
 
   private get onCloseSelectTabStrategy(): PostCloseFocusStrategy {
-    const config = vscode.workspace.getConfiguration("editorSwitcher");
+    const config = vscode.workspace.getConfiguration("editor-switcher");
     const strategy = config.get<PostCloseFocusStrategy>(
       "onCloseSelectTabStrategy",
       "selectNext",

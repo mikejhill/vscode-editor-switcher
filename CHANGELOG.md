@@ -11,11 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `editorSwitcher.onCloseKeepGroupFocus` setting to keep selection in the same editor group after closing from the picker when possible. If true, the quick pick dialog selection will try to stay on the nearest tab in the same group; otherwise, it will move between groups based on the extension’s tab selection strategy.
-- Add `editorSwitcher.onCloseSelectTabStrategy` setting to control which tab is selected after closing a highlighted tab via the quick pick dialog (options: "selectNext" or "selectPrevious"). This only affects the quick pick dialog and does not impact built-in editor tab selection if the closed tab was active.
+- Add `editor-switcher.onCloseKeepGroupFocus` setting to keep selection in the same editor group after closing from the picker when possible. If true, the quick pick dialog selection will try to stay on the nearest tab in the same group; otherwise, it will move between groups based on the extension’s tab selection strategy.
+- Add `editor-switcher.onCloseSelectTabStrategy` setting to control which tab is selected after closing a highlighted tab via the quick pick dialog (options: "selectNext" or "selectPrevious"). This only affects the quick pick dialog and does not impact built-in editor tab selection if the closed tab was active.
 - Localize titles and descriptions for new close-behavior settings across bundled language packs.
 - Add comprehensive unit and integration tests for new settings and selection behavior
 - Improve existing test assertions for increased reliability
+
+### Fixed
+
+- Close-behavior settings are read from the renamed `editor-switcher` configuration section, so user values take effect again.
+- English command titles and setting descriptions resolve again after the ID rename (base `package.nls.json` keys updated).
+
+### Security
+
+- Refresh development dependencies to clear all `npm audit` findings (`@vscode/test-cli` 0.0.15, `esbuild` 0.28, `jimp` 1.x, plus overrides for vulnerable transitive `glob`, `minimatch`, `diff`, `serialize-javascript` and `zod`).
 
 ## [1.0.2]
 
